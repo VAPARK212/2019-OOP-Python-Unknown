@@ -10,6 +10,7 @@ class Hospital_data:
         response.raise_for_status()
         html = response.text
         self.soup = bs4.BeautifulSoup(html, 'html.parser')
+        self.reference = url+'\n'+'service key = '+servicekey+'\n'+'expires:'+'2021.11.10'
 
     def show_url(self):
         return self.connecturl
@@ -31,9 +32,10 @@ class Hospital_data:
         return infolist
 
     def create_dict(self, name_list, infolist):
-        Hostpitals= {}
-        for hospital in name_list:
-            Hostpitals[hospital] = infolist[name_list.index(hospital)]
+        Hostpitals= []
+        for i in range(len(name_list)):
+            # 리스트에 dict가 들어있는게 편할 것 같은데...
+            Hostpitals[i] = {name_list[i]:'name'}
 
         return Hostpitals
 
