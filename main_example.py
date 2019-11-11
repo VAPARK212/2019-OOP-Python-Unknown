@@ -1,4 +1,5 @@
 from Emergency_search import *
+from hospital_info import *
 
 def print_local_list(data_list):
     for data in data_list:
@@ -13,6 +14,8 @@ correct_address = input("정확한 지번 입력> ")    # 사용자가 위의 ne
 Ls = emergency_search(correct_address)
 data_list = Ls.keyword_find_emergency()
 
+district = correct_address.split()
+print(district)
 for data in data_list:
     print("%s | %s | %s | %s"%(data['place_name'], data['phone'], data['place_url'], data['road_address_name']))
 
