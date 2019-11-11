@@ -25,7 +25,7 @@ class MyApp(QWidget):
         return self.return_text()
 
         # enter 버튼을 누르면 그 시그널이 괄호안의 함수로 전달 됩니다.
-        # 그 시그널이 눌리면 qle.text 값을 객체 밖으로 리턴 해주고 싶은 상황입니다.
+        # 그 시그널이 눌리면 qle.text 값을 객체 밖으로 리턴 해주고 싶은상황입니다.
 
     def return_text(self):
         return self.qle.text()
