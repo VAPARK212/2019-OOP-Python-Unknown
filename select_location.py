@@ -1,15 +1,16 @@
 import sys
 from PyQt5.QtWidgets import *
 
-class MyApp(QWidget):
+enter_flag=False
+text = '?'
 
+class MyApp(QWidget):
     def __init__(self):
         super().__init__()
-
         self.initUI()
 
     def initUI(self):
-
+        global enter_flag
         self.qle = QLineEdit(self)
         self.qle.move(20, 100)
 
@@ -20,15 +21,15 @@ class MyApp(QWidget):
         self.setWindowTitle('Location')
         self.setGeometry(300, 300, 1000, 200)
         self.show()
-
         enter.clicked.connect(self.return_text)
-        return self.return_text()
+        enter_flag=True
 
         # enter 버튼을 누르면 그 시그널이 괄호안의 함수로 전달 됩니다.
         # 그 시그널이 눌리면 qle.text 값을 객체 밖으로 리턴 해주고 싶은상황입니다.
 
     def return_text(self):
-        return self.qle.text()
+        pass_test(self.qle.text())
+        # self.qle.text() 전달하도록
 
     def click_location(self, test_location):
 
@@ -41,6 +42,11 @@ class MyApp(QWidget):
             cnt+=1
 
 
+def pass_test(txt):
+    print("??")
+    global text
+    text = txt
+
 if __name__ == '__main__':
 
     test_location = ['세종과학예술영재학교 | 세종특별자치시 달빛1로 265',
@@ -51,6 +57,8 @@ if __name__ == '__main__':
 
     app = QApplication(sys.argv)
     ex = MyApp()
-    print(ex.initUI)
-    # ex.click_location(dict[loc])
+    while not enter_flag:
+        continue
+    print(text)
+    ex.click_location(dict[text])
     sys.exit(app.exec_())
