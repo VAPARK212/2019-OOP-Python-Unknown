@@ -9,6 +9,9 @@ class get_local():
     def get_region(self):
         return get(loc+'region/').text
 
+    def get_organization(self):
+        return get(loc+'org/').text
+
     def get_postal_code(self):
         return get(loc+'postal/').text
 
@@ -21,6 +24,9 @@ class get_local():
 
 if __name__ == '__main__':
     local = get_local()
+    print(local.get_city())
+    print(local.get_region())
+    print(local.get_organization())
     print(local.get_postal_code())
     print(local.get_x(), local.get_y())
 
