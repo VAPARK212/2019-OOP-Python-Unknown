@@ -2,6 +2,7 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+import main_example
 
 
 class MyApp(QWidget):
@@ -94,8 +95,24 @@ class new_widget(StWidgetForm):
         self.box.addWidget(QLabel("Test Label5"))
 
 def hospital(tr_list):
+    hp_name = main_example.hp_list
+    hp_treat = main_example.hospital_data_dict
+    hp_treatment = sort_hp_treat(hp_treat)
+
+    for hp in hp_name:
+        if check_Ok(hp,hp_treatment,tr_list) is False:
+            del hp_name[hp_name.index(hp)]
+
+    print(hp_name)
+
+
+def sort_hp_treat(hp_treat):
+    hp_treatment = [0,0,0,0,0,0,0,0,0,0,0]
+    return hp_treatment
+
+def check_Ok(hp, hp_treatment, tr_list):
     for i in range(0,11):
-        if tr_list[i] is 1:
+        if tr_list[i] is 1 and hp_treatment[hp][]:
             print('%d' %(i+1))
 
 
