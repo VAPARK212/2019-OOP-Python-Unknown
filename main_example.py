@@ -18,3 +18,4 @@ district = correct_address.split()
 print(district)
 for data in data_list:
     print("%s | %s | %s | %s"%(data['place_name'], data['phone'], data['place_url'], data['road_address_name']))
+
