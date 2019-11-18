@@ -67,10 +67,14 @@ class Hospital_data_from_pos(Hospital_data):
     Hospital 의 위치를 가지고 hpid 기관 ID, 기관명, 응급실 전번을 가져온다.
     """
 
-    def __init__(self, url, add1, add2):  # Q0 주소(시도) 입력
+    def __init__(self, url, add1, add2, if_add2):  # Q0 주소(시도) 입력
         self.add1 = add1
         self.add2 = add2
-        self.url = url + '&Q0=' + self.add1 + '&Q1=' + self.add2
+        self.url = url + '&Q0=' + self.add1
+
+        if if_add2:
+            self.url = self.url + '&Q1=' + self.add2
+
         super().__init__(self.url)
 
     def get_name_list_id(self):

@@ -1,5 +1,6 @@
 # from Emergency_search import *
 from hospital_info import *
+from get_location import *
 
 """
 def print_local_list(data_list):
@@ -24,12 +25,30 @@ for data in data_list:
 """
 여기서 부터 병원 만지작 코드
 """
+local = get_local()
+print(local.local_coord2region())
+
+region1 = list(local.local_coord2region())[0]
+region2 = list(local.local_coord2region())[1]
+
+if region1 != '' and region2 != '':
+    add2 = True
+    if region2 == '':
+        add2 = False
+elif region1 == '':
+    if region2 != '':
+        add2 = False
+        region1 = region2
+        region2 = ''
+    else:
+        print("위치 조회중 에러 발생")
+
 
 hp_data = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytBassInfoInqire?'
 hp_from_add_url = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire?'
 
 hospital_data = Hospital_data(hp_data)
-hospital_pos = Hospital_data_from_pos(hp_from_add_url, '서울특별시', '종로구')
+hospital_pos = Hospital_data_from_pos(hp_from_add_url, region1, region2, if_add2=add2)
 
 print(hospital_pos.show_url())
 hp_list = hospital_pos.get_name_list()  # 병원의 이름
