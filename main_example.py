@@ -38,7 +38,7 @@ if region1 == '':
     else:
         print("위치 조회중 에러 발생")
 
-region1 = '서울특별시'
+region1 = '서울특별시' #OVERRIDE
 hp_data = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytBassInfoInqire?'
 hp_from_add_url = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire?'
 
@@ -49,15 +49,10 @@ print(hospital_pos.show_key())
 
 hp_dict = hospital_pos.get_name_list_id()
 hp_list = list(hp_dict)
-print(hp_list)
-print(hp_dict)
 
 ER_phone = hospital_data.get_ERphone_by_HPID(hp_dict)
-print(ER_phone)
 
 Address = hospital_data.get_Address_by_HPID(hp_dict)
-print(Address)
-
 
 def get_data_hospital(hospital_data_class, treatment_in, hp_l_in, hp_dict_in):
     hp_info = []
@@ -66,7 +61,6 @@ def get_data_hospital(hospital_data_class, treatment_in, hp_l_in, hp_dict_in):
         for i in treatment_in:
             hospital_data_class.get_info_by_HPID(treatment_name=i, info=info_tmp, HPID=hp_dict_in[hp])
         hp_info.append(info_tmp)
-    print(hp_info)
 
     hospital_data_dict_out = hospital_data_class.create_dict(infolist=hp_info, name_list=hp_l_in)
     return hospital_data_dict_out
@@ -95,4 +89,11 @@ MKioskTy9: 정신질환자
 """
 
 hospital_data_dict = get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
-print(hospital_data_dict)
+
+
+if __name__ == '__main__':
+    print(hp_list)
+    print(hp_dict)
+    print(ER_phone)
+    print(Address)
+    print(hospital_data_dict)
