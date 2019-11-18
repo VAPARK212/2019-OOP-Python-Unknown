@@ -1,6 +1,10 @@
 from requests import get
 
 loc = 'https://ipapi.co/'
+src = "https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
+
+def code_to_name(code):
+
 
 class get_local():
     def get_city(self):
@@ -20,6 +24,9 @@ class get_local():
 
     def get_y(self):
         return get(loc+'latitude/').text
+
+class code_to_name():
+
 
 
 if __name__ == '__main__':

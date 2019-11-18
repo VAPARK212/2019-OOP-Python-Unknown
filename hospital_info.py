@@ -65,7 +65,7 @@ url1 = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytBassInfoInq
 hospital_from_add_url = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire?'
 
 hospital1 = Hospital_data(url1)
-hospital2 = Hospital_data_from_pos(hospital_from_add_url, '서울특별시', '종로구')
+hospital2 = Hospital_data_from_pos(hospital_from_add_url, '대전광역시', '')
 
 print(hospital2.show_url())
 list2 = hospital2.get_name_list()
