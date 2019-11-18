@@ -25,34 +25,40 @@ for data in data_list:
 """
 여기서 부터 병원 만지작 코드
 """
-local = get_local()
-print(local.local_coord2region())
+def get_location():
+    local = get_local()
+    print(local.local_coord2region())
 
-region1 = list(local.local_coord2region())[0]
-region2 = list(local.local_coord2region())[1]
+    region1 = list(local.local_coord2region())[0]
+    region2 = list(local.local_coord2region())[1]
 
-if region1 == '':
-    if region2 != '':
-        region1 = region2
-        region2 = ''
-    else:
-        print("위치 조회중 에러 발생")
+    if region1 == '':
+        if region2 != '':
+            region1 = region2
+            region2 = ''
+        else:
+            print("위치 조회중 에러 발생")
+    return region1
 
-region1 = '서울특별시' #OVERRIDE
-hp_data = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytBassInfoInqire?'
-hp_from_add_url = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire?'
+def get_hpdict(region1):
+    hp_data = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytBassInfoInqire?'
+    hp_from_add_url = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire?'
 
-hospital_data = Hospital_data(hp_data)
-hospital_pos = Hospital_data_from_pos(hp_from_add_url, region1)
-print('페이지 수:' + str(hospital_pos.page_no))
-print(hospital_pos.show_key())
+    hospital_data = Hospital_data(hp_data)
+    hospital_pos = Hospital_data_from_pos(hp_from_add_url, region1)
+    print('페이지 수:' + str(hospital_pos.page_no))
+    print(hospital_pos.show_key())
 
-hp_dict = hospital_pos.get_name_list_id()
-hp_list = list(hp_dict)
+    hp_dict = hospital_pos.get_name_list_id()
+    return hp_dict
 
-ER_phone = hospital_data.get_ERphone_by_HPID(hp_dict)
+def get_ER_phone(hospital_data, hp_dict):
+    ER_phone = hospital_data.get_ERphone_by_HPID(hp_dict)
+    return ER_phone
 
-Address = hospital_data.get_Address_by_HPID(hp_dict)
+def get_Address(hospital_data, hp_dict):
+    Address = hospital_data.get_Address_by_HPID(hp_dict)
+    return Address
 
 def get_data_hospital(hospital_data_class, treatment_in, hp_l_in, hp_dict_in):
     hp_info = []
