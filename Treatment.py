@@ -12,9 +12,9 @@ class MyApp(QWidget):
 
         self.type_of_treatment = ['뇌출혈 수술', '뇌경색의 재관류', '심근경색의 재관류',
                              '복부 손상의 수술', '사지 접합의 수술', '응급 내시경', '응급 투석',
-                             '조산 산모', '정신 질환자', '신생아', '중증 화상']
+                             '조산 산모', '정신 질환자', '신생아', '중증 화상', '응급실']
 
-        self.treatment = [0,0,0,0,0,0,0,0,0,0,0]
+        self.treatment = [0,0,0,0,0,0,0,0,0,0,0,0]
 
         self.stk_w = QStackedWidget(self)
         self.initUI()
@@ -35,13 +35,13 @@ class MyApp(QWidget):
         group = QGroupBox("Treatments")
 
         self.cb = []
-        for i in range(0, 11):
+        for i in range(0, 12):
             self.initcb(i)
 
         self.initbtn()
 
         vbox = QVBoxLayout()
-        for i in range(0,11):
+        for i in range(0,12):
             vbox.addWidget(self.cb[i])
         vbox.addWidget(self.btn)
         group.setLayout(vbox)
@@ -94,26 +94,16 @@ class new_widget(StWidgetForm):
         self.box.addWidget(QLabel("Test Label4"))
         self.box.addWidget(QLabel("Test Label5"))
 
-def hospital(tr_list):
-    hp_name = main_example.hp_list
-    hp_treat = main_example.hospital_data_dict
-    hp_treatment = sort_hp_treat(hp_treat)
+def hospital(treat_li):
+    treatment_list = []
 
-    for hp in hp_name:
-        if check_Ok(hp,hp_treatment,tr_list) is False:
-            del hp_name[hp_name.index(hp)]
+    for i in range(0,12):
+        if treat_li[i] is 1:
+            if i is not 12:
+                treatment_list.append('MKioskTy' + '%d' % i)
+            else:
+                treatment_list.append('MKioskTy12')
 
-    print(hp_name)
-
-
-def sort_hp_treat(hp_treat):
-    hp_treatment = [0,0,0,0,0,0,0,0,0,0,0]
-    return hp_treatment
-
-def check_Ok(hp, hp_treatment, tr_list):
-    for i in range(0,11):
-        if tr_list[i] is 1 and hp_treatment[hp][]:
-            print('%d' %(i+1))
 
 
 if __name__ == '__main__':
