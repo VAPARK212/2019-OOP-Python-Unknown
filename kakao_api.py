@@ -2,7 +2,7 @@ import requests
 from abc import*
 
 class Kakao_api:
-    def __intit__(self):
+    def __init__(self):
         self.api_key = '74f2836791b7cbaaa18d715326a695f7'
 
         self.headers = {
