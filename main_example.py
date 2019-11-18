@@ -1,4 +1,4 @@
-#from Emergency_search import *
+# from Emergency_search import *
 from hospital_info import *
 
 """
@@ -32,8 +32,8 @@ hospital_data = Hospital_data(hp_data)
 hospital_pos = Hospital_data_from_pos(hp_from_add_url, '서울특별시', '종로구')
 
 print(hospital_pos.show_url())
-hp_list = hospital_pos.get_name_list()
-ER_phone = hospital_pos.get_ER_phone(hp_list)
+hp_list = hospital_pos.get_name_list()  # 병원의 이름
+ER_phone = hospital_pos.get_ER_phone(hp_list)  # dict, {병원 이름: 병원 주소}
 Address = hospital_pos.get_detailAdress(hp_list)
 hp_dict = hospital_pos.get_name_list_id()
 print(hp_list)
@@ -41,10 +41,12 @@ print(hp_dict)
 print(ER_phone)
 print(Address)
 
-treatment_list = ['MKioskTy1', 'MKioskTy10', 'MKioskTy11', 'MKioskTy2', 'MKioskTy25', 'MKioskTy3', 'MKioskTy4',
+treatment_list = ['dutyEryn', 'MKioskTy1', 'MKioskTy10', 'MKioskTy11', 'MKioskTy2', 'MKioskTy25', 'MKioskTy3',
+                  'MKioskTy4',
                   'MKioskTy5', 'MKioskTy6', 'MKioskTy7', 'MKioskTy8', 'MKioskTy9']
 """
-MKioskTy1: 뇌출혈수술
+dutyEryn: 응급실 가용 여부 (가능: 1, 불가능: 2)
+MKioskTy1: 뇌출혈수술 (가능: Y, 불가능: N, 정보 없음: U)
 MKioskTy10: 신생아
 MKioskTy11: 중증화상
 MKioskTy2: 뇌경색의재관류
