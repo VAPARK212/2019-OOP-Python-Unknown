@@ -82,11 +82,21 @@ class Hospital_data_from_pos(Hospital_data):
             name_list_id.update({name_list[i].getText(): id_list[i].getText()})
         return name_list_id
 
-    def get_ER_phone(self):
-        ER_phone = self.soup.select('dutyName')
-        try:
-            ER_phone = ER_phone[0].getText()
-        except IndexError:
-            ER_phone = '응급의료서비스 OPEN API에 등록되어있지 않습니다.'
+    def get_ER_phone(self, name_list):
+        ER_phone_list = self.soup.select('dutyTel3')
+        ER_phone = {}
+
+        for i in range(len(ER_phone_list)):
+            ER_phone.update({name_list[i]: ER_phone_list[i].getText()})
+
         return ER_phone
+
+    def get_detailAdress(self, name_list):
+        Address_list = self.soup.select('dutyAddr')
+        Address = {}
+
+        for i in range(len(Address_list)):
+            Address.update({name_list[i]: Address_list[i].getText()})
+
+        return Address
 

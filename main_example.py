@@ -1,6 +1,7 @@
-from Emergency_search import *
+#from Emergency_search import *
 from hospital_info import *
 
+"""
 def print_local_list(data_list):
     for data in data_list:
         print("%s | %s" % (data['place_name'], data['road_address_name']))
@@ -20,6 +21,7 @@ for data in data_list:
     print("%s | %s | %s | %s"%(data['place_name'], data['phone'], data['place_url'], data['road_address_name']))
 
 """
+"""
 여기서 부터 병원 만지작 코드
 """
 
@@ -31,9 +33,13 @@ hospital_pos = Hospital_data_from_pos(hp_from_add_url, '서울특별시', '종�
 
 print(hospital_pos.show_url())
 hp_list = hospital_pos.get_name_list()
+ER_phone = hospital_pos.get_ER_phone(hp_list)
+Address = hospital_pos.get_detailAdress(hp_list)
 hp_dict = hospital_pos.get_name_list_id()
 print(hp_list)
 print(hp_dict)
+print(ER_phone)
+print(Address)
 
 treatment_list = ['MKioskTy1', 'MKioskTy10', 'MKioskTy11', 'MKioskTy2', 'MKioskTy25', 'MKioskTy3', 'MKioskTy4',
                   'MKioskTy5', 'MKioskTy6', 'MKioskTy7', 'MKioskTy8', 'MKioskTy9']
