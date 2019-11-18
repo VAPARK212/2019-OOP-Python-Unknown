@@ -1,5 +1,6 @@
 import bs4
 import requests
+import math
 
 
 class Hospital:
@@ -32,12 +33,6 @@ class Hospital_data(Hospital):
     def __init__(self, url):
         super().__init__(url)
 
-    def get_name_list(self):
-        name_list = self.soup.select('dutyName')
-        for i in name_list:
-            name_list[name_list.index(i)] = i.getText()
-        return name_list
-
     def get_info_by_HPID(self, treatment_name, info, HPID):
         connecturl = self.connecturl + '&HPID=' + HPID
         response = requests.get(connecturl)
@@ -52,6 +47,40 @@ class Hospital_data(Hospital):
             info_recv = 'U'  # U for Unknown
         info.append(info_recv)
 
+    def get_ERphone_by_HPID(self, hp_dict):
+        ER_phone = {}
+        for hp in hp_dict:
+            connecturl = self.connecturl + '&HPID=' + hp_dict[hp]
+            response = requests.get(connecturl)
+            response.raise_for_status()
+            html = response.text
+            soup4search = bs4.BeautifulSoup(html, 'html.parser')
+
+            info_recv = soup4search.select('dutyTel3')
+            try:
+                info_recv = info_recv[0].getText()
+            except IndexError:
+                info_recv = 'U'  # U for Unknown
+            ER_phone.update({hp: info_recv})
+        return ER_phone
+
+    def get_Address_by_HPID(self, hp_dict):
+        Address = {}
+        for hp in hp_dict:
+            connecturl = self.connecturl + '&HPID=' + hp_dict[hp]
+            response = requests.get(connecturl)
+            response.raise_for_status()
+            html = response.text
+            soup4search = bs4.BeautifulSoup(html, 'html.parser')
+
+            info_recv = soup4search.select('dutyAddr')
+            try:
+                info_recv = info_recv[0].getText()
+            except IndexError:
+                info_recv = 'U'  # U for Unknown
+            Address.update({hp: info_recv})
+        return Address
+
     def create_dict(self, name_list, infolist):
         Hospitals = {}
         for j in range(len(name_list)):
@@ -62,38 +91,38 @@ class Hospital_data(Hospital):
         return Hospitals
 
 
-class Hospital_data_from_pos(Hospital_data):
+class Hospital_data_from_pos(Hospital):
     """
     Hospital 의 위치를 가지고 hpid 기관 ID, 기관명, 응급실 전번을 가져온다.
     """
 
-    def __init__(self, url, add1, add2, if_add2):  # Q0 주소(시도) 입력
+    def __init__(self, url, add1):  # Q0 주소(시도) 입력
         self.add1 = add1
-        self.add2 = add2
         self.url = url + '&Q0=' + self.add1
-
-        if if_add2:
-            self.url = self.url + '&Q1=' + self.add2
+        self.url_tmp = ''
 
         super().__init__(self.url)
 
-    def get_name_list_id(self):
-        name_list = self.soup.select('dutyName')
-        id_list = self.soup.select('hpid')
-        name_list_id = {}
+        page_no_list = self.soup.select('totalCount')
+        self.page_no = math.ceil(int(page_no_list[0].getText()) / 10)
 
-        for i in range(len(name_list)):
-            name_list_id.update({name_list[i].getText(): id_list[i].getText()})
+    def get_name_list_id(self):
+        name_list_id = {}
+        for i in range(self.page_no):
+            url_tmp = self.url + '&pageNo=' + str(i)
+            self.connecturl = url_tmp + '&servicekey=' + self.servicekey
+            response = requests.get(self.connecturl)
+            response.raise_for_status()
+            html = response.text
+            self.soup = bs4.BeautifulSoup(html, 'html.parser')
+
+            name_list = self.soup.select('dutyName')
+            id_list = self.soup.select('hpid')
+
+            for j in range(len(name_list)):
+                name_list_id.update({name_list[j].getText(): id_list[j].getText()})
         return name_list_id
 
-    def get_ER_phone(self, name_list):
-        ER_phone_list = self.soup.select('dutyTel3')
-        ER_phone = {}
-
-        for i in range(len(ER_phone_list)):
-            ER_phone.update({name_list[i]: ER_phone_list[i].getText()})
-
-        return ER_phone
 
     def get_detailAdress(self, name_list):
         Address_list = self.soup.select('dutyAddr')

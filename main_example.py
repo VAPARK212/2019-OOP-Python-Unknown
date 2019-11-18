@@ -31,33 +31,30 @@ print(local.local_coord2region())
 region1 = list(local.local_coord2region())[0]
 region2 = list(local.local_coord2region())[1]
 
-if region1 != '' and region2 != '':
-    add2 = True
-    if region2 == '':
-        add2 = False
-elif region1 == '':
+if region1 == '':
     if region2 != '':
-        add2 = False
         region1 = region2
         region2 = ''
     else:
         print("위치 조회중 에러 발생")
 
-
 hp_data = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytBassInfoInqire?'
 hp_from_add_url = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire?'
 
 hospital_data = Hospital_data(hp_data)
-hospital_pos = Hospital_data_from_pos(hp_from_add_url, region1, region2, if_add2=add2)
+hospital_pos = Hospital_data_from_pos(hp_from_add_url, region1)
+print('페이지 수:' + str(hospital_pos.page_no))
+print(hospital_pos.show_key())
 
-print(hospital_pos.show_url())
-hp_list = hospital_pos.get_name_list()  # 병원의 이름
-ER_phone = hospital_pos.get_ER_phone(hp_list)  # dict, {병원 이름: 병원 주소}
-Address = hospital_pos.get_detailAdress(hp_list)
 hp_dict = hospital_pos.get_name_list_id()
+hp_list = list(hp_dict)
 print(hp_list)
 print(hp_dict)
+
+ER_phone = hospital_data.get_ERphone_by_HPID(hp_dict)
 print(ER_phone)
+
+Address = hospital_data.get_Address_by_HPID(hp_dict)
 print(Address)
 
 treatment_list = ['dutyEryn', 'MKioskTy1', 'MKioskTy10', 'MKioskTy11', 'MKioskTy2', 'MKioskTy25', 'MKioskTy3',
@@ -78,6 +75,7 @@ MKioskTy7: 응급투석
 MKioskTy8: 조산산모
 MKioskTy9: 정신질환자
 """
+
 hp_info = []
 for hp in hp_list:
     info_tmp = []
