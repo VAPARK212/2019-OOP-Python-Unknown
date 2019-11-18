@@ -15,8 +15,8 @@ class get_local(Kakao_local_api):
             'output_coord': output_coord,
             'lang': lang
         }
-        docs = self.get_json(self.url_maker('/v2/local/geo/coord2region.json'), payload)['documents']
-        return docs
+        docs = self.get_json(self.url_maker('/v2/local/geo/coord2regioncode.json'), payload)['documents'][0]
+        return {docs['region_1depth_name'], docs['region_2depth_name']}
 
 
 if __name__ == '__main__':
