@@ -1,5 +1,6 @@
 from hospital_info import *
 
+
 class Hospital_data_from_pos(Hospital_data):
     """
     Hospital 의 위치를 가지고 hpid 기관 ID, 기관명, 응급실 전번을 가져온다.
