@@ -38,6 +38,7 @@ if region1 == '':
     else:
         print("위치 조회중 에러 발생")
 
+region1 = '서울특별시'
 hp_data = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytBassInfoInqire?'
 hp_from_add_url = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire?'
 
@@ -57,6 +58,22 @@ print(ER_phone)
 Address = hospital_data.get_Address_by_HPID(hp_dict)
 print(Address)
 
+
+def get_data_hospital(hospital_data_class, treatment_in, hp_l_in, hp_dict_in):
+    hp_info = []
+    for hp in hp_l_in:
+        info_tmp = []
+        for i in treatment_in:
+            hospital_data_class.get_info_by_HPID(treatment_name=i, info=info_tmp, HPID=hp_dict_in[hp])
+        hp_info.append(info_tmp)
+    print(hp_info)
+
+    hospital_data_dict_out = hospital_data_class.create_dict(infolist=hp_info, name_list=hp_l_in)
+    return hospital_data_dict_out
+
+
+
+
 treatment_list = ['dutyEryn', 'MKioskTy1', 'MKioskTy10', 'MKioskTy11', 'MKioskTy2', 'MKioskTy25', 'MKioskTy3',
                   'MKioskTy4',
                   'MKioskTy5', 'MKioskTy6', 'MKioskTy7', 'MKioskTy8', 'MKioskTy9']
@@ -74,15 +91,8 @@ MKioskTy6: 응급내시경
 MKioskTy7: 응급투석
 MKioskTy8: 조산산모
 MKioskTy9: 정신질환자
+
 """
 
-hp_info = []
-for hp in hp_list:
-    info_tmp = []
-    for i in treatment_list:
-        hospital_data.get_info_by_HPID(treatment_name=i, info=info_tmp, HPID=hp_dict[hp])
-    hp_info.append(info_tmp)
-print(hp_info)
-
-hospital_data_dict = hospital_data.create_dict(infolist=hp_info, name_list=hp_list)
+hospital_data_dict = get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
 print(hospital_data_dict)
