@@ -77,11 +77,12 @@ class MyApp(QWidget):
 
 
     @pyqtSlot()
-    def hospital(treat_li):
+    def hospital(self,treat_li):
 
         region1 = main_example.get_location()
-        main_example.basic_info(region1)
-        hp_dict = main_example.get_hp_dict(hospital_pos)
+        self.hospital_data, self.hospital_pos =  main_example.basic_info(region1)
+        self.hp_dict = main_example.get_hp_dict(self.hospital_pos)
+        self.hp_list = list(self.hp_dict)
 
         self.treatment_list = []
 
@@ -91,6 +92,8 @@ class MyApp(QWidget):
                     self.treatment_list.append('MKioskTy' + '%d' % i)
                 else:
                     self.treatment_list.append('MKioskTy12')
+
+        main_example.get_data_hospital(self.hospital_data, self.treatment_list, self.hp_list, self.hp_dict)
 
 
 class StWidgetForm(QGroupBox):

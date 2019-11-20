@@ -45,13 +45,12 @@ def basic_info(region1):
     hp_data = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytBassInfoInqire?'
     hp_from_add_url = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire?'
 
-    global hospital_data
-    global hospital_pos
-
     hospital_data = Hospital_data(hp_data)
     hospital_pos = Hospital_data_from_pos(hp_from_add_url, region1)
     print('페이지 수:' + str(hospital_pos.page_no))
     print(hospital_pos.show_key())
+
+    return hospital_data, hospital_pos
 
 def get_hp_dict(hospital_pos):
     hp_dict = hospital_pos.get_name_list_id()
