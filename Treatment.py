@@ -2,6 +2,7 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+import main_example
 
 class MyApp(QWidget):
 
@@ -57,7 +58,7 @@ class MyApp(QWidget):
         self.btn = QPushButton('Enter', self)
 
         self.btn.clicked.connect(self.new_page)
-        self.btn.clicked.connect(lambda state, treat_li = self.treatment : hospital(treat_li))
+        self.btn.clicked.connect(lambda state, treat_li = self.treatment : self.hospital(treat_li))
 
 
     @pyqtSlot()
@@ -73,6 +74,26 @@ class MyApp(QWidget):
         self.stk_w.addWidget(new_widget())
         self.widget_laytout.addWidget(self.stk_w)
         self.setLayout(self.widget_laytout)
+
+
+    @pyqtSlot()
+    def hospital(self,treat_li):
+
+        region1 = main_example.get_location()
+        self.hospital_data, self.hospital_pos =  main_example.basic_info(region1)
+        self.hp_dict = main_example.get_hp_dict(self.hospital_pos)
+        self.hp_list = list(self.hp_dict)
+
+        self.treatment_list = []
+
+        for i in range(0, 12):
+            if treat_li[i] is 1:
+                if i is not 12:
+                    self.treatment_list.append('MKioskTy' + '%d' % i)
+                else:
+                    self.treatment_list.append('MKioskTy12')
+
+        main_example.get_data_hospital(self.hospital_data, self.treatment_list, self.hp_list, self.hp_dict)
 
 
 class StWidgetForm(QGroupBox):
@@ -91,17 +112,6 @@ class new_widget(StWidgetForm):
         self.box.addWidget(QLabel("Test Label3"))
         self.box.addWidget(QLabel("Test Label4"))
         self.box.addWidget(QLabel("Test Label5"))
-
-def hospital(treat_li):
-    treatment_list = []
-
-    for i in range(0,12):
-        if treat_li[i] is 1:
-            if i is not 12:
-                treatment_list.append('MKioskTy' + '%d' % i)
-            else:
-                treatment_list.append('MKioskTy12')
-
 
 
 if __name__ == '__main__':

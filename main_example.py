@@ -25,6 +25,8 @@ for data in data_list:
 """
 여기서 부터 병원 만지작 코드
 """
+
+
 def get_location():
     local = get_local()
     print(local.local_coord2region())
@@ -47,6 +49,8 @@ def basic_info(region1):
     hospital_pos = Hospital_data_from_pos(hp_from_add_url, region1)
     print('페이지 수:' + str(hospital_pos.page_no))
     print(hospital_pos.show_key())
+
+    return hospital_data, hospital_pos
 
 def get_hp_dict(hospital_pos):
     hp_dict = hospital_pos.get_name_list_id()
@@ -99,9 +103,10 @@ MKioskTy9: 정신질환자
 if __name__ == '__main__':
     region1 = get_location()
     basic_info(region1)
-    get_hp_dict(hospital_pos)
+    hp_dict = get_hp_dict(hospital_pos)
+    hp_list = list(hp_dict)
     print(hp_list)
     print(hp_dict)
-    print(ER_phone)
-    print(Address)
-    print(hospital_data_dict)
+    # print(ER_phone)
+    # print(Address)
+    # print(hospital_data_dict)
