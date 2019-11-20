@@ -16,7 +16,12 @@ class get_local(Kakao_local_api):
             'lang': lang
         }
         docs = self.get_json(self.url_maker('/v2/local/geo/coord2regioncode.json'), payload)['documents'][0]
+        self.x = x
+        self.y = y
         return {docs['region_1depth_name'], docs['region_2depth_name']}
+
+    def get_points(self):
+        return {self.x, self.y}
 
 
 if __name__ == '__main__':
