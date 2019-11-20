@@ -45,6 +45,8 @@ class Hospital_data(Hospital):
             info_recv = info_recv[0].getText()
         except IndexError:
             info_recv = 'U'  # U for Unknown
+        if info_recv != 'Y':
+            return 0
         info.append(info_recv)
 
     def get_ERphone_by_HPID(self, hp_dict):
