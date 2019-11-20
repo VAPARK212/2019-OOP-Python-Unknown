@@ -77,6 +77,9 @@ platform 에러 발생시: http://doongkibangki.tistory.com/24
 Kakao API
 주소 좌표: https://developers.kakao.com/docs/restapi/local
 
+ipapi: ip 추적을 통해 사용자의 현재 위치 확인
+주소: https://ipapi.co/
+
 API 신청을 통하여 획득한 키를 이용하여 웹페이지 접속 후 파싱
 requests, bs4이용
 전국 응급의료기관 조회 서비스:
