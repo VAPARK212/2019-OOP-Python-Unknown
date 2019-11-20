@@ -35,7 +35,6 @@ def get_location():
     if region1 == '':
         if region2 != '':
             region1 = region2
-            region2 = ''
         else:
             print("위치 조회중 에러 발생")
     return region1
