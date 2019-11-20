@@ -25,6 +25,10 @@ for data in data_list:
 """
 여기서 부터 병원 만지작 코드
 """
+
+hospital_data
+hospital_pos
+
 def get_location():
     local = get_local()
     print(local.local_coord2region())
@@ -42,6 +46,9 @@ def get_location():
 def basic_info(region1):
     hp_data = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytBassInfoInqire?'
     hp_from_add_url = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire?'
+
+    global hospital_data
+    global hospital_pos
 
     hospital_data = Hospital_data(hp_data)
     hospital_pos = Hospital_data_from_pos(hp_from_add_url, region1)
