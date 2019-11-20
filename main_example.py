@@ -39,7 +39,7 @@ def get_location():
             print("위치 조회중 에러 발생")
     return region1
 
-def get_hpdict(region1):
+def basic_info(region1):
     hp_data = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytBassInfoInqire?'
     hp_from_add_url = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire?'
 
@@ -48,6 +48,7 @@ def get_hpdict(region1):
     print('페이지 수:' + str(hospital_pos.page_no))
     print(hospital_pos.show_key())
 
+def get_hp_dict(hospital_pos):
     hp_dict = hospital_pos.get_name_list_id()
     return hp_dict
 
@@ -59,15 +60,15 @@ def get_Address(hospital_data, hp_dict):
     Address = hospital_data.get_Address_by_HPID(hp_dict)
     return Address
 
-def get_data_hospital(hospital_data_class, treatment_in, hp_l_in, hp_dict_in):
+def get_data_hospital(hospital_data, treatment_in, hp_l_in, hp_dict_in):
     hp_info = []
     for hp in hp_l_in:
         info_tmp = []
         for i in treatment_in:
-            hospital_data_class.get_info_by_HPID(treatment_name=i, info=info_tmp, HPID=hp_dict_in[hp])
+            hospital_data.get_info_by_HPID(treatment_name=i, info=info_tmp, HPID=hp_dict_in[hp])
         hp_info.append(info_tmp)
 
-    hospital_data_dict_out = hospital_data_class.create_dict(infolist=hp_info, name_list=hp_l_in)
+    hospital_data_dict_out = hospital_data.create_dict(infolist=hp_info, name_list=hp_l_in)
     return hospital_data_dict_out
 
 
@@ -93,10 +94,12 @@ MKioskTy9: 정신질환자
 
 """
 
-hospital_data_dict = get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
 
 
 if __name__ == '__main__':
+    region1 = get_location()
+    basic_info(region1)
+    get_hp_dict(hospital_pos)
     print(hp_list)
     print(hp_dict)
     print(ER_phone)
