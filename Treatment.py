@@ -104,14 +104,26 @@ class StWidgetForm(QGroupBox):
 
 
 class new_widget(StWidgetForm):
-    def __init__(self):
+    def __init__(self,Address, ER_phone):
         super(new_widget, self).__init__()
         self.setTitle("Hospital recommendation")
-        self.box.addWidget(QLabel("Test Label1")) # 병원 정보 작성.
-        self.box.addWidget(QLabel("Test Label2"))
-        self.box.addWidget(QLabel("Test Label3"))
-        self.box.addWidget(QLabel("Test Label4"))
-        self.box.addWidget(QLabel("Test Label5"))
+
+        self.Label(Address, ER_phone)
+
+        self.box.addWidget(QLabel(hosp_info[1])) # 병원 정보 작성.
+        self.box.addWidget(QLabel(hosp_info[2]))
+        self.box.addWidget(QLabel(hosp_info[3]))
+        self.box.addWidget(QLabel(hosp_info[4]))
+        self.box.addWidget(QLabel(hosp_info[5]))
+
+    def Label(self, Address, ER_phone):
+        for i in range(0,5):
+            hosp_info[i] = '기관명 : ' +
+                           '기관 id : ' +
+                           '주소 : ' + Address
+                           '응급실 전화 : ' + ER_phone
+
+
 
 
 if __name__ == '__main__':
