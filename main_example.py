@@ -26,8 +26,6 @@ for data in data_list:
 여기서 부터 병원 만지작 코드
 """
 
-hospital_data
-hospital_pos
 
 def get_location():
     local = get_local()
@@ -106,9 +104,10 @@ MKioskTy9: 정신질환자
 if __name__ == '__main__':
     region1 = get_location()
     basic_info(region1)
-    get_hp_dict(hospital_pos)
+    hp_dict = get_hp_dict(hospital_pos)
+    hp_list = list(hp_dict)
     print(hp_list)
     print(hp_dict)
-    print(ER_phone)
-    print(Address)
-    print(hospital_data_dict)
+    # print(ER_phone)
+    # print(Address)
+    # print(hospital_data_dict)
