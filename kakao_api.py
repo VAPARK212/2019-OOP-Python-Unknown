@@ -4,6 +4,7 @@ from abc import*
 
 loc = 'https://ipapi.co/'
 
+
 class Kakao_api:
     def __init__(self):
         self.api_key = '74f2836791b7cbaaa18d715326a695f7'
