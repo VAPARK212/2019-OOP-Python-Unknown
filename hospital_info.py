@@ -109,7 +109,7 @@ class Hospital_data_from_pos(Hospital):
     def get_name_list_id(self):
         name_list_id = {}
         for i in range(self.page_no):
-            url_tmp = self.url + '&pageNo=' + str(i)
+            url_tmp = self.url + '&pageNo=' + str(i+1)
             self.connecturl = url_tmp + '&servicekey=' + self.servicekey
             response = requests.get(self.connecturl)
             response.raise_for_status()
