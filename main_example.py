@@ -107,11 +107,11 @@ MKioskTy9: 정신질환자
 
 if __name__ == '__main__':
     # region1 = get_location()
-    region1 = '서울특별시'
+    region1 = '대전광역시'
 
     hp_data = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytBassInfoInqire?'
     hp_from_add_url = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire?'
-    treatment_list = ['MKioskTy10']
+    treatment_list = ['MKioskTy25']
 
     hospital_data = Hospital_data(hp_data)
     hospital_pos = Hospital_data_from_pos(hp_from_add_url, region1)
@@ -120,8 +120,6 @@ if __name__ == '__main__':
 
     hp_dict = get_hp_dict(hospital_pos)
     hp_list = list(hp_dict)
-    print(hp_list)
-    print(hp_dict)
     hp_list, hp_dict = get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
     # print(ER_phone)
     # print(Address)
