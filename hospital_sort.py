@@ -1,29 +1,26 @@
-import math
 from get_location import *
+import operator
 
 
 class Hospital_sort:
     def __init__(self):
-        str_sx = get_local().get_points()[0].split('.')
-
-        self.sx = float(get_local().get_points()[0])
-        self.sy = float(get_local().get_points()[1])
+        self.sx = float(get_local().get_points()[0])    # kakao api를 통한 사용자의 위치 x좌표
+        self.sy = float(get_local().get_points()[1])    # kakao apu를 통한 사용자의 위치 y좌표
         self.dic = {}
 
-    def get_distance(self, key, x, y):
-        self.dic[key] = math.sqrt((self.sx-x)*(self.sx-x)+(self.sy-y)(self.sy-y))
+    def cal_distance(self, key, x, y):
+        self.dic[key] = (self.sx-x)*(self.sx-x)+(self.sy-y)*(self.sy-y)
 
     def sort_by_distance(self):
-        sorted_dic = sorted(self.dic.items())
+        sorted_dic = sorted(self.dic.items(), key=operator.itemgetter(1))
         return sorted_dic
 
 
+# import하고 사용 예시
 if __name__ == "__main__":
-    import copy
-
-    dic_hos = {'아산병원': [1, 2], '세종병원': [3, 4], '신촌세브란스': [5, 6]}
-    di = Hospital_sort()
+    dic_hos = {'아산병원': [1, 2], '세종병원': [3, 4], '신촌세브란스': [5, 6]}    # 임의의 hospital info data 딕셔너리
+    di = Hospital_sort()    # class
     for keys in dic_hos:
-        di.get_distance(keys, dic_hos[keys][0], dic_hos[keys][1])
-    new_dic = copy.deepcopy(di.sort_by_distance())
+        di.cal_distance(keys, dic_hos[keys][0], dic_hos[keys][1])    # 딕셔너리의 key와 value 값(x좌표 and y좌표)을 cal_distance 함수에 전달
+    new_dic = di.sort_by_distance()     # (반드시)cal_distance 함수 실행 이후에 sort_by_distance 함수를 통해 거리 기준으로 정렬된 병원 데이터 딕셔너리 리턴
     print(new_dic)
