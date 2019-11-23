@@ -122,26 +122,26 @@ class MyApp(QWidget):
         print(treat_li)
         print('""')
 
-        # main_example.py와 합작
-        # ip 주소를 이용하여 현재 위치 파악
-        region = main_example.get_location()
-        # 현재 region 안에 있는 병원들의
-        self.hospital_data, self.hospital_pos =  main_example.basic_info(region)
-        # 현재 region 안에 있는 병원들의
-        self.hp_dict = main_example.get_hp_dict(self.hospital_pos)
-        self.hp_list = list(self.hp_dict)
-
-        self.treatment_list = []
+        treatment_list = []
 
         for i in range(0, 12):
             if treat_li[i] is 1:
                 if i is not 12:
-                    self.treatment_list.append('MKioskTy' + '%d' % i)
+                    treatment_list.append('MKioskTy' + '%d' % i)
                 else:
-                    self.treatment_list.append('MKioskTy12')
+                    treatment_list.append('MKioskTy12')
 
-        main_example.get_data_hospital(self.hospital_data, self.treatment_list, self.hp_list, self.hp_dict)
+        region1 = main_example.get_location()
 
+        hospital_data, hospital_pos = main_example.basic_info(region1)
+
+        hp_dict = main_example.get_hp_dict(hospital_pos)
+        hp_list = list(hp_dict)
+        print(hp_list)
+        print(hp_dict)
+        hp_list, hp_dict = main_example.get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
+        print(hp_list)
+        print(hp_dict)
 
 class StWidgetForm(QGroupBox):
     '''
