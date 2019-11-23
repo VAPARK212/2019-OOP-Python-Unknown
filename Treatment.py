@@ -84,7 +84,7 @@ class MyApp(QWidget):
 
         self.btn.clicked.connect(lambda state, treat_li=self.treatment: self.hospital(treat_li))
 
-       # self.btn.clicked.connect(self.new_page)
+        # self.btn.clicked.connect(self.new_page)
 
 
     @pyqtSlot()
@@ -102,7 +102,6 @@ class MyApp(QWidget):
 
 
 # Slot이 아니게 될 예정. 병원이 결정되면 실행되도록 할 것.
-    @pyqtSlot()
     def new_page(self):
         '''
         새로운 페이지를 생성.
@@ -110,9 +109,15 @@ class MyApp(QWidget):
         stk_w (=> QStackedWidget(self)) 를 이용하여 여러 위젯을 겹쳐 띄울 수 있게 됨.
         :return:
         '''
+        print('new page')
         self.stk_w.addWidget(new_widget())
+        print(1)
         self.widget_laytout.addWidget(self.stk_w)
+        print(2)
         self.setLayout(self.widget_laytout)
+        print(3)
+        self.show()
+        print(4)
 
 
     @pyqtSlot()
@@ -143,6 +148,8 @@ class MyApp(QWidget):
         print(hp_list)
         print(hp_dict)
 
+        self.new_page( )
+
 class StWidgetForm(QGroupBox):
     '''
     new_widget의 부모 클래스.
@@ -159,10 +166,19 @@ class new_widget(StWidgetForm):
     추가로 띄우는 widget.
     QLabel 형식으로 병원 정보 작성하도록 함.
     '''
-    def __init__(self,Address, ER_phone):
+    def __init__(self):
+
+        print('please')
         super(new_widget, self).__init__()
         self.setTitle("Hospital recommendation")
         self.hosp_info = []
+
+        self.box.addWidget(QLabel('Test Label 1')) # 병원 정보 작성.
+        self.box.addWidget(QLabel('Test Label 2'))
+        self.box.addWidget(QLabel('Test Label 3'))
+        self.box.addWidget(QLabel('Test Label 4'))
+        self.box.addWidget(QLabel('Test Label 5'))
+
 '''
         self.Label(Address, ER_phone)
 
