@@ -2,16 +2,23 @@ import math
 import collections
 from get_location import *
 
-x = get_local().get_points()[0]
-y = get_local().get_points()[1]
 
 dic_tmp = {}
 
-def sorting(x1, y1):
-    Point2D = collections.namedtuple('Point2D', ['x', 'y'])
-    p1 = Point2D(x=x1, y=y1)
-    p2 = Point2D(x=x2, y=y2)
+class Hospital_sort:
+    def __init__(self):
+        self.sx = get_local().get_points()[0]
+        self.sy = get_local().get_points()[1]
+
+    def get_distance(self, x, y):
+        return math.sqrt((self.sx-x)*(self.sx-x)+(self.sy-y)(self.sy-y))
+
+    def put_dist_dic(dist):
+        pass
+
+    def sorting(x1, y1):
+        pass
 
 
 if __name__ == '__main__':
-    print(x, y)
+    print('test')
