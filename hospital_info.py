@@ -33,7 +33,7 @@ class Hospital_data(Hospital):
     def __init__(self, url):
         super().__init__(url)
 
-    def get_info_by_HPID(self, treatment_name, info, HPID):
+    def get_info_by_HPID(self, treatment_name, HPID):
         connecturl = self.connecturl + '&HPID=' + HPID
         response = requests.get(connecturl)
         response.raise_for_status()
@@ -45,7 +45,10 @@ class Hospital_data(Hospital):
             info_recv = info_recv[0].getText()
         except IndexError:
             info_recv = 'U'  # U for Unknown
-        info.append(info_recv)
+        if info_recv != 'Y':
+            return 1
+        else:
+            return 0
 
     def get_ERphone_by_HPID(self, hp_dict):
         ER_phone = {}
