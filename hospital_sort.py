@@ -26,7 +26,7 @@ if __name__ == "__main__":
     dic_hos = {'아산병원': [1, 2], '세종병원': [3, 4], '신촌세브란스': [5, 6]}    # 임의의 hospital info data 딕셔너리
     di = Hospital_sort()    # class
     for keys in dic_hos:
-        di.cal_distance(keys, dic_hos[keys][0], dic_hos[keys][1])    # 딕셔너리의 key와 value 값(x좌표 and y좌표)을 cal_distance 함수에 전달
+        di.cal_distance(keys, dic_hos[keys][0], dic_hos[keys][1])    # 병원 이름과 해당 병원의 x좌표, y좌표를 cal_distance 함수에 전달
     hospital_name_list = di.sort_by_distance()     # 반드시 cal_distance 함수 실행 이후에 sort_by_distance 함수를 실행, 거리 기준으로 정렬된 병원 이름 데이터 리스트 리턴
     print(hospital_name_list)
 
