@@ -74,10 +74,7 @@ def get_data_hospital(hospital_data, treatment_in, hp_l_in, hp_dict_in):
     for hp in hp_l_in:
         info_tmp = []
         for i in treatment_in:
-            end = hospital_data.get_info_by_HPID(treatment_name=i, info=info_tmp, HPID=hp_dict_in[hp])
-        if end == 0:
-            hp_hp
-        else:
+            hospital_data.get_info_by_HPID(treatment_name=i, info=info_tmp, HPID=hp_dict_in[hp])
             hp_info.append(info_tmp)
 
     hospital_data_dict_out = hospital_data.create_dict(infolist=hp_info, name_list=hp_l_in)
