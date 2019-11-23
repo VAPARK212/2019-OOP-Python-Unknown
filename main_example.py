@@ -1,4 +1,3 @@
-# from Emergency_search import *
 from hospital_info import *
 from get_location import *
 
