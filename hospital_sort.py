@@ -4,14 +4,14 @@ import operator
 
 class Hospital_sort:
     def __init__(self):
-        self.sx = float(get_local().get_points()[0])    # kakao api를 통한 사용자의 위치 x좌표
-        self.sy = float(get_local().get_points()[1])    # kakao apu를 통한 사용자의 위치 y좌표
+        self.sx = float(get_local().get_points()[0])    # ip 주소 이용-> 사용자 위치 좌표
+        self.sy = float(get_local().get_points()[1])
         self.dic = {}
 
     def cal_distance(self, key, x, y):
         self.dic[key] = (self.sx-x)*(self.sx-x)+(self.sy-y)*(self.sy-y)
 
-    def sort_by_distance(self):
+    def sort_by_distance(self):     # 거리 기준 정렬
         sorted_dic = sorted(self.dic.items(), key=operator.itemgetter(1))
         return sorted_dic
 
@@ -22,5 +22,5 @@ if __name__ == "__main__":
     di = Hospital_sort()    # class
     for keys in dic_hos:
         di.cal_distance(keys, dic_hos[keys][0], dic_hos[keys][1])    # 딕셔너리의 key와 value 값(x좌표 and y좌표)을 cal_distance 함수에 전달
-    new_dic = di.sort_by_distance()     # (반드시)cal_distance 함수 실행 이후에 sort_by_distance 함수를 통해 거리 기준으로 정렬된 병원 데이터 딕셔너리 리턴
+    new_dic = di.sort_by_distance()     # 반드시 cal_distance 함수 실행 이후에 sort_by_distance 함수를 실행, 거리 기준으로 정렬된 병원 데이터 딕셔너리 리턴
     print(new_dic)
