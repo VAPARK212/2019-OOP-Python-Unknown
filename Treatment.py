@@ -123,8 +123,11 @@ class MyApp(QWidget):
         print('""')
 
         # main_example.py와 합작
-        region1 = main_example.get_location()
-        self.hospital_data, self.hospital_pos =  main_example.basic_info(region1)
+        # ip 주소를 이용하여 현재 위치 파악
+        region = main_example.get_location()
+        # 현재 region 안에 있는 병원들의
+        self.hospital_data, self.hospital_pos =  main_example.basic_info(region)
+        # 현재 region 안에 있는 병원들의
         self.hp_dict = main_example.get_hp_dict(self.hospital_pos)
         self.hp_list = list(self.hp_dict)
 
