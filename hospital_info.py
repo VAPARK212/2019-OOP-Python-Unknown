@@ -44,7 +44,7 @@ class Hospital_data(Hospital):
         try:
             info_recv = info_recv[0].getText()
         except IndexError:
-            info_recv = 'U'  # U for Unknown
+            return 1
         if info_recv != 'Y':
             return 1
         else:

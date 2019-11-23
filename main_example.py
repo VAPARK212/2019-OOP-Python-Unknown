@@ -70,17 +70,22 @@ def get_Address(hospital_data, hp_dict):
 
 
 def get_data_hospital(hospital_data, treatment_in, hp_l_in, hp_dict_in):
+    hp_list = []
+    hp_dict = {}
     for hp in hp_l_in:
+        flag = 1
         for i in treatment_in:
             delete = hospital_data.get_info_by_HPID(treatment_name=i, HPID=hp_dict_in[hp])
             if delete:
-                hp_l_in.remove(hp)
-                hp_dict_in.pop(hp)
+                flag = 0
                 break
-    return hp_l_in, hp_dict_in
+        if flag:
+            hp_list.append(hp)
+            hp_dict.update({hp: hp_dict_in[hp]})
+    return hp_list, hp_dict
 
 
-treatment_list = ['dutyEryn', 'MKioskTy1', 'MKioskTy10', 'MKioskTy11', 'MKioskTy2', 'MKioskTy25', 'MKioskTy3',
+treatment_list = ['MKioskTy1', 'MKioskTy10', 'MKioskTy11', 'MKioskTy2', 'MKioskTy25', 'MKioskTy3',
                   'MKioskTy4',
                   'MKioskTy5', 'MKioskTy6', 'MKioskTy7', 'MKioskTy8', 'MKioskTy9']
 """
@@ -101,13 +106,12 @@ MKioskTy9: 정신질환자
 """
 
 if __name__ == '__main__':
-    region1 = get_location()
+    # region1 = get_location()
+    region1 = '서울특별시'
 
     hp_data = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytBassInfoInqire?'
     hp_from_add_url = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire?'
-    treatment_list = ['dutyEryn', 'MKioskTy1', 'MKioskTy10', 'MKioskTy11', 'MKioskTy2', 'MKioskTy25', 'MKioskTy3',
-                      'MKioskTy4',
-                      'MKioskTy5', 'MKioskTy6', 'MKioskTy7', 'MKioskTy8', 'MKioskTy9']
+    treatment_list = ['MKioskTy10']
 
     hospital_data = Hospital_data(hp_data)
     hospital_pos = Hospital_data_from_pos(hp_from_add_url, region1)
