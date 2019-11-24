@@ -62,6 +62,9 @@ def get_ER_phone(hospital_data, hp_dict):
     ER_phone = hospital_data.get_ERphone_by_HPID(hp_dict)
     return ER_phone
 
+def get_xy(hospital_data, hp_dict):
+    xy = hospital_data.get_xy_by_HPID(hp_dict)
+    return xy
 
 def get_Address(hospital_data, hp_dict):
     Address = hospital_data.get_Address_by_HPID(hp_dict)
@@ -106,7 +109,7 @@ MKioskTy9: 정신질환자
 
 if __name__ == '__main__':
     # region1 = get_location()
-    region1 = '대전광역시'
+    region1 = '서울특별시'
 
     hp_data = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytBassInfoInqire?'
     hp_from_add_url = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire?'
@@ -120,6 +123,7 @@ if __name__ == '__main__':
     hp_dict = get_hp_dict(hospital_pos)
     hp_list = list(hp_dict)
     hp_list, hp_dict = get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
-    # print(ER_phone)
+    xy = get_xy(hospital_data, hp_dict)
+    print(xy)
     # print(Address)
     print(hp_list)
