@@ -23,4 +23,4 @@ class get_local(Kakao_api):
 if __name__ == '__main__':
     local = get_local()
     print(local.local_coord2region())
-
+    print(local.get_points())

@@ -84,6 +84,27 @@ class Hospital_data(Hospital):
             Address.update({hp: info_recv})
         return Address
 
+    def get_xy_by_HPID(self, hp_dict):
+        xy = {}
+        for hp in hp_dict:
+            connecturl = self.connecturl + '&HPID=' + hp_dict[hp]
+            response = requests.get(connecturl)
+            response.raise_for_status()
+            html = response.text
+            soup4search = bs4.BeautifulSoup(html, 'html.parser')
+
+            info_x = soup4search.select('wgs84Lon')
+            info_y = soup4search.select('wgs84Lat')
+            try:
+                info_x = info_x[0].getText()
+                info_y = info_y[0].getText()
+            except IndexError:
+                info_x = 'U'  # U for Unknown
+                info_y = 'U'
+            xy.update({hp: (info_x, info_y)})
+        return xy
+
+
     def create_dict(self, name_list, infolist):
         Hospitals = {}
         for j in range(len(name_list)):
