@@ -136,7 +136,8 @@ class MyApp(QWidget):
                 else:
                     treatment_list.append('MKioskTy12')
 
-        region1 = main_example.get_location()
+        # region1 = main_example.get_location()
+        region1 = '대전광역시'
 
         hospital_data, hospital_pos = main_example.basic_info(region1)
 

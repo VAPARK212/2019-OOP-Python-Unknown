@@ -109,7 +109,7 @@ MKioskTy9: 정신질환자
 
 if __name__ == '__main__':
     # region1 = get_location()
-    region1 = '서울특별시'
+    region1 = '대전광역시'
 
     hp_data = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytBassInfoInqire?'
     hp_from_add_url = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire?'
