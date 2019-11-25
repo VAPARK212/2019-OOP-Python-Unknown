@@ -3,6 +3,24 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import main_example
+from threading import Thread
+
+# 출처: https://stackoverflow.com/questions/6893968/how-to-get-the-return-value-from-a-thread-in-python
+class ThreadWithReturnValue(Thread):
+    def __init__(self, group=None, target=None, name=None,
+                 args=(), kwargs={}, Verbose=None):
+        Thread.__init__(self, group, target, name, args, kwargs)
+        self._return = None
+
+    def run(self):
+        print(type(self._target))
+        if self._target is not None:
+            self._return = self._target(*self._args,
+                                        **self._kwargs)
+
+    def join(self, *args):
+        Thread.join(self, *args)
+        return self._return
 
 class MyApp(QWidget):
 
@@ -32,7 +50,7 @@ class MyApp(QWidget):
         self.widget_laytout.addWidget(self.initGroup())
         self.setLayout(self.widget_laytout)
 
-        self.setGeometry(300, 300, 500, 300)
+        self.setGeometry(100, 100, 500, 300)
         self.resize(1000,500)
         self.show()
 
@@ -102,15 +120,14 @@ class MyApp(QWidget):
 
 
 # Slot이 아니게 될 예정. 병원이 결정되면 실행되도록 할 것.
-    def new_page(self):
+    def new_page(self,hospital_data, hp_list, hp_dict):
         '''
         새로운 페이지를 생성.
         최상위 5개 병원에 대한 정보를 출력할 수 있는 공간 제작.
         stk_w (=> QStackedWidget(self)) 를 이용하여 여러 위젯을 겹쳐 띄울 수 있게 됨.
         :return:
         '''
-        print('new page')
-        self.stk_w.addWidget(new_widget())
+        self.stk_w.addWidget(new_widget(hospital_data, hp_list, hp_dict))
         print(1)
         self.widget_laytout.addWidget(self.stk_w)
         print(2)
@@ -144,18 +161,53 @@ class MyApp(QWidget):
         hp_list = list(hp_dict)
         print(hp_list)
         print(hp_dict)
+
+        # xy좌표를 불러오는 thread 시간 단축 (48%)
+        thread_xy = ThreadWithReturnValue(target=main_example.get_xy, args=(hospital_data, hp_dict))
+        thread_xy.start()
+
+        # 전화번호를 불러오는 thread 시간 단축 (48%)
+        thread_ER = ThreadWithReturnValue(target=main_example.get_ER_phone, args=(hospital_data, hp_dict))
+        thread_ER.start()
+
+        # 주소를 불러오는 thread 시간 단축 (48%)
+        thread_Address = ThreadWithReturnValue(target=main_example.get_Address, args=(hospital_data, hp_dict))
+        thread_Address.start()
+
+
         hp_list, hp_dict = main_example.get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
         print(hp_list)
         print(hp_dict)
 
-        self.new_page( )
+        #print(main_example.get_ER_phone(hospital_data, hp_dict))
+
+        ## hp_dict 거리 순 정렬 결과 : list.
+
+        for key in hp_dict:
+            if key not in hp_list:
+                del hp_dict[key]
+
+        print(hp_dict)
+        print(hp_list)
+
+        # 앞에서 실행한 thread의 결과를 각각 불러온다. 반환하는 thread 형식
+        xy = thread_xy.join()
+        print(xy)
+
+        ER_phone = thread_ER.join()
+        print(ER_phone)
+
+        Address = thread_Address.join()
+        print(Address)
+
+        self.new_page(hospital_data, hp_list, hp_dict)
 
 class StWidgetForm(QGroupBox):
     '''
     new_widget의 부모 클래스.
     QGroupBox 형식.
     '''
-    def __init__(self):
+    def __init__(self,hospital_data, hp_list, hp_dict):
         QGroupBox.__init__(self)
         self.box = QBoxLayout(QBoxLayout.LeftToRight)
         self.setLayout(self.box)
@@ -166,39 +218,33 @@ class new_widget(StWidgetForm):
     추가로 띄우는 widget.
     QLabel 형식으로 병원 정보 작성하도록 함.
     '''
-    def __init__(self):
+    def __init__(self,hospital_data, hp_list, hp_dict):
 
         print('please')
         super(new_widget, self).__init__()
         self.setTitle("Hospital recommendation")
-        self.hosp_info = []
+        self.hosp_info = {}
 
-        self.box.addWidget(QLabel('Test Label 1')) # 병원 정보 작성.
-        self.box.addWidget(QLabel('Test Label 2'))
-        self.box.addWidget(QLabel('Test Label 3'))
-        self.box.addWidget(QLabel('Test Label 4'))
-        self.box.addWidget(QLabel('Test Label 5'))
+        print(1)
+        self.Label(hospital_data, hp_list, hp_dict)
 
-'''
-        self.Label(Address, ER_phone)
-
-        self.box.addWidget(QLabel(hosp_info[1])) # 병원 정보 작성.
-        self.box.addWidget(QLabel(hosp_info[2]))
-        self.box.addWidget(QLabel(hosp_info[3]))
-        self.box.addWidget(QLabel(hosp_info[4]))
-        self.box.addWidget(QLabel(hosp_info[5]))
+        i = 1
+        for _ in hp_list:
+            self.box.addWidget(QLabel(self.hosp_info[hp_list[i]]))  # 병원 정보 작성.
+            i += 1
 
 
-    def Label(self, Address, ER_phone):
-        for i in range(0,5):
-            hos_label = '기관명 : ' +
-                           '기관 id : ' +
-                           '주소 : ' + Address
-                           '응급실 전화 : ' + ER_phone
-            hosp_info.append(hos_label)
-'''
+    def Label(self,hospital_data, hp_list, hp_dict):
 
+        Address = main_example.get_Address(hospital_data, hp_dict)
+        Phone = main_example.get_ER_phone(hospital_data, hp_dict)
 
+        for key in hp_list:
+            hos_label = '기관명 : ' + key + '\n' + \
+                        '주소 : ' + Address[key] + '\n' +\
+                        '응급실 전화 : ' +  Phone[key]
+
+            self.hosp_info.update({key : hos_label})
 
 
 if __name__ == '__main__':
