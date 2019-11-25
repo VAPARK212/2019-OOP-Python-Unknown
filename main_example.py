@@ -110,6 +110,26 @@ MKioskTy9: 정신질환자
 
 """
 
+#thread 내용. Treatment으로 옮김
+"""
+# 출처: https://stackoverflow.com/questions/6893968/how-to-get-the-return-value-from-a-thread-in-python
+class ThreadWithReturnValue(Thread):
+    def __init__(self, group=None, target=None, name=None,
+                 args=(), kwargs={}, Verbose=None):
+        Thread.__init__(self, group, target, name, args, kwargs)
+        self._return = None
+
+    def run(self):
+        print(type(self._target))
+        if self._target is not None:
+            self._return = self._target(*self._args,
+                                        **self._kwargs)
+
+    def join(self, *args):
+        Thread.join(self, *args)
+        return self._return
+"""
+
 if __name__ == '__main__':
     # region1 = get_location()
     region1 = '대전광역시'
@@ -123,6 +143,18 @@ if __name__ == '__main__':
     print('페이지 수:' + str(hospital_pos.page_no))
     print(hospital_pos.show_key())
 
+
+    #서울특별시 기준으로 thread 사용 미사용을 통한 모든 정보 조회 결과 속도: thread 사용시 48% 감소함
+    """
+    thread 이용
+    # xy좌표를 불러오는 thread 시간 단축 (48%)
+    thread_xy = ThreadWithReturnValue(target=main_example.get_xy, args=(hospital_data, hp_dict))
+    thread_xy.start()
+
+    # 앞에서 실행한 thread의 결과를 각각 불러온다. 반환하는 thread 형식
+    xy = thread_xy.join()
+    print(xy)
+    """
     hp_dict = get_hp_dict(hospital_pos)
     hp_list = list(hp_dict)
 
