@@ -129,21 +129,17 @@ class MyApp(QWidget):
         :return:
         '''
         self.stk_w.addWidget(new_widget(hospital_data, hp_list, hp_dict))
-        print(1)
         self.widget_laytout.addWidget(self.stk_w)
-        print(2)
         self.setLayout(self.widget_laytout)
-        print(3)
         self.show()
-        print(4)
-
 
     @pyqtSlot()
     def hospital(self,treat_li):
-
+        '''
         print('""')
         print(treat_li)
         print('""')
+        '''
 
         treatment_list = []
 
@@ -154,16 +150,19 @@ class MyApp(QWidget):
                 else:
                     treatment_list.append('MKioskTy12')
 
-        #region1 = main_example.get_location()
-        region1 = '대전광역시'
 
+        # 지역, 병원 정보 받기
+        region1 = '대전광역시' #region1 = main_example.get_location()
         hospital_data, hospital_pos = main_example.basic_info(region1)
 
+        # 주소만을 바탕으로 한 dict list
         hp_dict = main_example.get_hp_dict(hospital_pos)
         hp_list = list(hp_dict)
+        ## print(hp_list)
+
+        # 가능한 수술을 바탕으로 한 dict list
         hp_list, hp_dict = main_example.get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
-        print(hp_list)
-        print(hp_dict)
+        ## print(hp_list)
 
         # xy좌표를 불러오는 thread 시간 단축 (48%)
         thread_xy = ThreadWithReturnValue(target=main_example.get_xy, args=(hospital_data, hp_dict))
@@ -172,28 +171,29 @@ class MyApp(QWidget):
         # 앞에서 실행한 thread의 결과를 각각 불러온다. 반환하는 thread 형식
         xy = thread_xy.join()
 
+        # 가까운 병원 순으로 sort.
         di = hospital_sort.Hospital_sort()  # class
-        print(xy)
+
         for keys in xy:
             di.cal_distance(keys, xy[keys][0], xy[keys][1])  # 병원 이름과 해당 병원의 x좌표, y좌표를 cal_distance 함수에 전달
         hp_list = di.sort_by_distance()  # 반드시 cal_distance 함수 실행 이후에 sort_by_distance 함수를 실행, 거리 기준으로 정렬된 병원 이름 데이터 리스트 리턴
-        print(hp_list)
-        length = len(hp_list)
-        print(length)
 
+        # 가장 가까운 5개 병원만 남김.
+        length = len(hp_list)
         if length > 5:
             for i in range(5,length):
                 del hp_list[5]
 
+        # dict 는 가장 가까운, 가능한 병원 5개에 대해 구성된 딕셔너리
+        dict = {}
+
+        for key in hp_list:
+            dict[key]=hp_dict[key]
+        print(dict)
         print(hp_list)
 
-        for key in hp_dict:
-            if key not in hp_list:
-                del hp_dict[key]
-
-        print(hp_dict)
-
-        self.new_page(hospital_data, hp_list, hp_dict)
+        # 병원 정보에 관한 새로운 창 띄우기
+        self.new_page(hospital_data, hp_list, dict)
 
 class StWidgetForm(QGroupBox):
     '''
@@ -202,7 +202,7 @@ class StWidgetForm(QGroupBox):
     '''
     def __init__(self,hospital_data, hp_list, hp_dict):
         QGroupBox.__init__(self)
-        self.box = QBoxLayout(QBoxLayout.LeftToRight)
+        self.box = QBoxLayout(QBoxLayout.TopToBottom)
         self.setLayout(self.box)
 
 
@@ -213,34 +213,13 @@ class new_widget(StWidgetForm):
     '''
     def __init__(self,hospital_data, hp_list, hp_dict):
 
-        print('please')
-        super(new_widget, self).__init__()
+        super(new_widget, self).__init__(hospital_data, hp_list, hp_dict)
         self.setTitle("Hospital recommendation")
         self.hosp_info = {}
 
-
-        '''
-                # 전화번호를 불러오는 thread 시간 단축 (48%)
-        thread_ER = ThreadWithReturnValue(target=main_example.get_ER_phone, args=(hospital_data, hp_dict))
-        thread_ER.start()
-
-        # 주소를 불러오는 thread 시간 단축 (48%)
-        thread_Address = ThreadWithReturnValue(target=main_example.get_Address, args=(hospital_data, hp_dict))
-        thread_Address.start()
-
-        ER_phone = thread_ER.join()
-        print(ER_phone)
-
-        Address = thread_Address.join()
-        print(Address)
-
-        '''
-
-
-        print(1)
         self.Label(hospital_data, hp_list, hp_dict)
 
-        i = 1
+        i = 0
         for _ in hp_list:
             self.box.addWidget(QLabel(self.hosp_info[hp_list[i]]))  # 병원 정보 작성.
             i += 1
@@ -248,8 +227,19 @@ class new_widget(StWidgetForm):
 
     def Label(self,hospital_data, hp_list, hp_dict):
 
-        Address = main_example.get_Address(hospital_data, hp_dict)
-        Phone = main_example.get_ER_phone(hospital_data, hp_dict)
+        # 전화번호를 불러오는 thread 시간 단축 (48%)
+        thread_ER = ThreadWithReturnValue(target=main_example.get_ER_phone, args=(hospital_data, hp_dict))
+        thread_ER.start()
+
+        # 주소를 불러오는 thread 시간 단축 (48%)
+        thread_Address = ThreadWithReturnValue(target=main_example.get_Address, args=(hospital_data, hp_dict))
+        thread_Address.start()
+
+        Phone = thread_ER.join()
+        ## print(Phone)
+
+        Address = thread_Address.join()
+        ## print(Address)
 
         for key in hp_list:
             hos_label = '기관명 : ' + key + '\n' + \
