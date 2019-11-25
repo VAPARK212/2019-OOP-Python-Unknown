@@ -59,7 +59,6 @@ def get_hp_dict(hospital_pos):
     hp_dict = hospital_pos.get_name_list_id()
     return hp_dict
 
-
 def get_ER_phone(hospital_data, hp_dict):
     ER_phone = hospital_data.get_ERphone_by_HPID(hp_dict)
     return ER_phone
