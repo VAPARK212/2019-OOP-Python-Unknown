@@ -101,7 +101,7 @@ class Hospital_data(Hospital):
             except IndexError:
                 info_x = 'U'  # U for Unknown
                 info_y = 'U'
-            xy.update({hp: [info_x, info_y]})
+            xy.update({hp: [float(info_x), float(info_y)]})
         return xy
 
 
