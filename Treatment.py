@@ -4,6 +4,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import main_example
 from threading import Thread
+import hospital_sort
 
 # 출처: https://stackoverflow.com/questions/6893968/how-to-get-the-return-value-from-a-thread-in-python
 class ThreadWithReturnValue(Thread):
@@ -153,12 +154,14 @@ class MyApp(QWidget):
                 else:
                     treatment_list.append('MKioskTy12')
 
-        region1 = main_example.get_location()
+        #region1 = main_example.get_location()
+        region1 = '대전광역시'
 
         hospital_data, hospital_pos = main_example.basic_info(region1)
 
         hp_dict = main_example.get_hp_dict(hospital_pos)
         hp_list = list(hp_dict)
+        hp_list, hp_dict = main_example.get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
         print(hp_list)
         print(hp_dict)
 
@@ -166,18 +169,16 @@ class MyApp(QWidget):
         thread_xy = ThreadWithReturnValue(target=main_example.get_xy, args=(hospital_data, hp_dict))
         thread_xy.start()
 
-        # 전화번호를 불러오는 thread 시간 단축 (48%)
-        thread_ER = ThreadWithReturnValue(target=main_example.get_ER_phone, args=(hospital_data, hp_dict))
-        thread_ER.start()
+        # 앞에서 실행한 thread의 결과를 각각 불러온다. 반환하는 thread 형식
+        xy = thread_xy.join()
 
-        # 주소를 불러오는 thread 시간 단축 (48%)
-        thread_Address = ThreadWithReturnValue(target=main_example.get_Address, args=(hospital_data, hp_dict))
-        thread_Address.start()
-
-
-        hp_list, hp_dict = main_example.get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
+        di = hospital_sort.Hospital_sort()  # class
+        print(xy)
+        for keys in xy:
+            di.cal_distance(keys, xy[keys][0], xy[keys][1])  # 병원 이름과 해당 병원의 x좌표, y좌표를 cal_distance 함수에 전달
+        hp_list = di.sort_by_distance()  # 반드시 cal_distance 함수 실행 이후에 sort_by_distance 함수를 실행, 거리 기준으로 정렬된 병원 이름 데이터 리스트 리턴
         print(hp_list)
-        print(hp_dict)
+
 
         #print(main_example.get_ER_phone(hospital_data, hp_dict))
 
@@ -189,16 +190,6 @@ class MyApp(QWidget):
 
         print(hp_dict)
         print(hp_list)
-
-        # 앞에서 실행한 thread의 결과를 각각 불러온다. 반환하는 thread 형식
-        xy = thread_xy.join()
-        print(xy)
-
-        ER_phone = thread_ER.join()
-        print(ER_phone)
-
-        Address = thread_Address.join()
-        print(Address)
 
         self.new_page(hospital_data, hp_list, hp_dict)
 
@@ -224,6 +215,25 @@ class new_widget(StWidgetForm):
         super(new_widget, self).__init__()
         self.setTitle("Hospital recommendation")
         self.hosp_info = {}
+
+
+        '''
+                # 전화번호를 불러오는 thread 시간 단축 (48%)
+        thread_ER = ThreadWithReturnValue(target=main_example.get_ER_phone, args=(hospital_data, hp_dict))
+        thread_ER.start()
+
+        # 주소를 불러오는 thread 시간 단축 (48%)
+        thread_Address = ThreadWithReturnValue(target=main_example.get_Address, args=(hospital_data, hp_dict))
+        thread_Address.start()
+
+        ER_phone = thread_ER.join()
+        print(ER_phone)
+
+        Address = thread_Address.join()
+        print(Address)
+
+        '''
+
 
         print(1)
         self.Label(hospital_data, hp_list, hp_dict)
