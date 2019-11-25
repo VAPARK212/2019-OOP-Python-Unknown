@@ -1,13 +1,13 @@
 import webbrowser
 
 
-def open_map(x, y):
+def open_map(x, y): # roadview.html 여는 함수
     frontcode = """
     <!DOCTYPE html>
     <html>
     <head>
         <meta charset="utf-8"/>
-        <title>Kakao 지도 시작하기</title>
+        <title>Kakao Map</title>
     </head>
     <body>
         <div id="map" style="width:500px;height:400px;"></div>
@@ -27,7 +27,7 @@ def open_map(x, y):
     </body>
     </html>
     
-    <!--출처: http://apis.map.kakao.com/web/guide/#step1-->
+    <!--source: http://apis.map.kakao.com/web/guide/#step1-->
     """
 
     with open("roadview.html", 'w') as f:
