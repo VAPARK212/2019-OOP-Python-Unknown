@@ -1,6 +1,6 @@
 from hospital_info import *
 from get_location import *
-import threading
+from threading import Thread
 
 """
 def print_local_list(data_list):
@@ -25,6 +25,24 @@ for data in data_list:
 """
 여기서 부터 병원 만지작 코드
 """
+
+
+# 출처: https://stackoverflow.com/questions/6893968/how-to-get-the-return-value-from-a-thread-in-python
+class ThreadWithReturnValue(Thread):
+    def __init__(self, group=None, target=None, name=None,
+                 args=(), kwargs={}, Verbose=None):
+        Thread.__init__(self, group, target, name, args, kwargs)
+        self._return = None
+
+    def run(self):
+        print(type(self._target))
+        if self._target is not None:
+            self._return = self._target(*self._args,
+                                        **self._kwargs)
+
+    def join(self, *args):
+        Thread.join(self, *args)
+        return self._return
 
 
 def get_location():
@@ -63,9 +81,11 @@ def get_ER_phone(hospital_data, hp_dict):
     ER_phone = hospital_data.get_ERphone_by_HPID(hp_dict)
     return ER_phone
 
+
 def get_xy(hospital_data, hp_dict):
     xy = hospital_data.get_xy_by_HPID(hp_dict)
     return xy
+
 
 def get_Address(hospital_data, hp_dict):
     Address = hospital_data.get_Address_by_HPID(hp_dict)
@@ -124,9 +144,26 @@ if __name__ == '__main__':
     hp_dict = get_hp_dict(hospital_pos)
     hp_list = list(hp_dict)
 
-    xy = get_xy(hospital_data, hp_dict)
-    print(xy)
+    #xy좌표를 불러오는 thread 시간 단축 (48%)
+    thread_xy = ThreadWithReturnValue(target=get_xy, args=(hospital_data, hp_dict))
+    thread_xy.start()
+
+    # 전화번호를 불러오는 thread 시간 단축 (48%)
+    thread_ER = ThreadWithReturnValue(target=get_ER_phone, args=(hospital_data, hp_dict))
+    thread_ER.start()
+
+    # 주소를 불러오는 thread 시간 단축 (48%)
+    thread_Address = ThreadWithReturnValue(target=get_Address, args=(hospital_data, hp_dict))
+    thread_Address.start()
 
     hp_list, hp_dict = get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
     # print(Address)
     print(hp_list)
+
+    #앞에서 실행한 thread의 결과를 각각 불러온다. 반환하는 thread 형식
+    xy = thread_xy.join()
+    print(xy)
+    ER_phone = thread_ER.join()
+    print(ER_phone)
+    Address = thread_Address.join()
+    print(Address)
