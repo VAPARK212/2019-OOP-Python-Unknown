@@ -1,6 +1,5 @@
 from hospital_info import *
 from get_location import *
-import folium
 
 """
 def print_local_list(data_list):
