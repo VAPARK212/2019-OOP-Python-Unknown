@@ -109,23 +109,6 @@ MKioskTy8: 조산산모
 MKioskTy9: 정신질환자
 
 """
-from threading import  Thread
-class ThreadWithReturnValue(Thread):
-    def __init__(self, group=None, target=None, name=None,
-                 args=(), kwargs={}, Verbose=None):
-        Thread.__init__(self, group, target, name, args, kwargs)
-        self._return = None
-
-    def run(self):
-        print(type(self._target))
-        if self._target is not None:
-            self._return = self._target(*self._args,
-                                        **self._kwargs)
-
-    def join(self, *args):
-        Thread.join(self, *args)
-        return self._return
-
 
 if __name__ == '__main__':
     # region1 = get_location()
@@ -142,14 +125,6 @@ if __name__ == '__main__':
 
     hp_dict = get_hp_dict(hospital_pos)
     hp_list = list(hp_dict)
-
-    # xy좌표를 불러오는 thread 시간 단축 (48%)
-    thread_xy = ThreadWithReturnValue(target=get_xy, args=(hospital_data, hp_dict))
-    thread_xy.start()
-    xy = thread_xy.join()
-    print(type(xy))
-    for i in xy:
-        print(i)
 
     hp_list, hp_dict = get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
     # print(Address)
