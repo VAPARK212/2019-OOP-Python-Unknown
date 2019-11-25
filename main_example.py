@@ -1,5 +1,6 @@
 from hospital_info import *
 from get_location import *
+import folium
 
 """
 def print_local_list(data_list):
@@ -128,6 +129,7 @@ if __name__ == '__main__':
 
     hp_list, hp_dict = get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
     # print(Address)
+
     print(hp_list)
 
 
