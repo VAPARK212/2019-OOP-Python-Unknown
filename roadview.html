@@ -1,26 +1,51 @@
 
-    <!DOCTYPE html>
+        <!DOCTYPE html>
     <html>
     <head>
-        <meta charset="utf-8"/>
-        <title>Kakao 지도 시작하기</title>
+        <meta charset="utf-8">
+        <title>Map</title>
+        
     </head>
     <body>
-        <div id="map" style="width:500px;height:400px;"></div>
-        <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=ea01b00367677ce3c9f5208fa6f4a478"></script>
-        <script>
-            var container = document.getElementById('map');
-            var options = {
-                center: new kakao.maps.LatLng(
-    33.450701,126.570667
-    ),
-                level: 3
-            };
+    <div id="map" style="width:100%;height:350px;"></div>
     
-            var map = new kakao.maps.Map(container, options);
-        </script>
+    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=ea01b00367677ce3c9f5208fa6f4a478"></script>
+    <script>
+    
+    let name='kakao'
+    let y=37.402056
+    let x=127.108212
+    var mapContainer = document.getElementById('map'),
+        mapOption = { 
+            center: new kakao.maps.LatLng(y,x),
+            level: 3
+        };
+    
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+    
+    var markerPosition  = new kakao.maps.LatLng(y, x); 
+    
+    var marker = new kakao.maps.Marker({
+        position: markerPosition
+    });
+
+    marker.setMap(map);
+    
+    var iwContent = '<div style="padding:5px;">name<br><a href="https://map.kakao.com/link/to/18577297"style="color:blue" target="_blank">Way</a></div>',
+        iwPosition = new kakao.maps.LatLng(y, x);
+    
+    var infowindow = new kakao.maps.InfoWindow({
+        position : iwPosition, 
+        content : iwContent
+    
+    
+    });
+    
+      
+    infowindow.open(map, marker);
+    
+    
+    </script>
     </body>
     </html>
-    
-    <!--출처: http://apis.map.kakao.com/web/guide/#step1-->
     

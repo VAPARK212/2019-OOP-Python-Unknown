@@ -1,42 +1,67 @@
 import webbrowser
 
 
-def open_map(x, y): # roadview.html 여는 함수
+def open_map(name, y, x, localID): # roadview.html 여는 함수
     frontcode = """
-    <!DOCTYPE html>
+        <!DOCTYPE html>
     <html>
     <head>
-        <meta charset="utf-8"/>
-        <title>Kakao Map</title>
+        <meta charset="utf-8">
+        <title>Map</title>
+        
     </head>
     <body>
-        <div id="map" style="width:500px;height:400px;"></div>
-        <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=ea01b00367677ce3c9f5208fa6f4a478"></script>
-        <script>
-            var container = document.getElementById('map');
-            var options = {
-                center: new kakao.maps.LatLng(
+    <div id="map" style="width:100%;height:350px;"></div>
+    
+    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=ea01b00367677ce3c9f5208fa6f4a478"></script>
+    <script>
     """
     rearcode = """
-    ),
-                level: 3
-            };
+    var mapContainer = document.getElementById('map'),
+        mapOption = { 
+            center: new kakao.maps.LatLng(y,x),
+            level: 3
+        };
     
-            var map = new kakao.maps.Map(container, options);
-        </script>
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+    
+    var markerPosition  = new kakao.maps.LatLng(y, x); 
+    
+    var marker = new kakao.maps.Marker({
+        position: markerPosition
+    });
+
+    marker.setMap(map);
+    
+    var iwContent = '<div style="padding:5px;">name<br><a href="https://map.kakao.com/link/to/"""
+
+    lastcode = """style="color:blue" target="_blank">Way</a></div>',
+        iwPosition = new kakao.maps.LatLng(y, x);
+    
+    var infowindow = new kakao.maps.InfoWindow({
+        position : iwPosition, 
+        content : iwContent
+    
+    
+    });
+    
+      
+    infowindow.open(map, marker);
+    
+    
+    </script>
     </body>
     </html>
-    
-    <!--source: http://apis.map.kakao.com/web/guide/#step1-->
     """
 
     with open("roadview.html", 'w') as f:
-        f.write(str(frontcode)+str(x)+','+str(y)+str(rearcode))
+        f.write(str(frontcode)+'\n'+'    let name=\''+str(name)+'\'\n'+'    let y='+str(y)+'\n'+'    let x='+str(x)+str(rearcode)+str(localID)+"\""+str(lastcode))
 
+    f.close()
     webbrowser.open("roadview.html")
 
 
 if __name__ == "__main__":
-    open_map(33.450701, 126.570667)
+    open_map('kakao', 37.402056, 127.108212, 18577297)
 
 # 출처: https://riptutorial.com/ko/python/example/27066/%EA%B8%B0%EB%B3%B8-%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80%EB%A1%9C-url-%EC%97%B4%EA%B8%B0
