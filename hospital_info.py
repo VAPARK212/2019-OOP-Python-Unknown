@@ -101,7 +101,7 @@ class Hospital_data(Hospital):
             except IndexError:
                 info_x = 'U'  # U for Unknown
                 info_y = 'U'
-            xy.update({hp: (info_x, info_y)})
+            xy.update({hp: [info_x, info_y]})
         return xy
 
 
@@ -113,6 +113,7 @@ class Hospital_data(Hospital):
                 Hospitals[name_list[j]] = Hospitals[name_list[j]] + data
 
         return Hospitals
+
 
 
 class Hospital_data_from_pos(Hospital):

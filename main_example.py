@@ -1,5 +1,6 @@
 from hospital_info import *
 from get_location import *
+import threading
 
 """
 def print_local_list(data_list):
@@ -122,8 +123,10 @@ if __name__ == '__main__':
 
     hp_dict = get_hp_dict(hospital_pos)
     hp_list = list(hp_dict)
-    hp_list, hp_dict = get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
+
     xy = get_xy(hospital_data, hp_dict)
     print(xy)
+
+    hp_list, hp_dict = get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
     # print(Address)
     print(hp_list)
