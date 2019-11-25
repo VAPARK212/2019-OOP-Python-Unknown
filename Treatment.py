@@ -178,18 +178,20 @@ class MyApp(QWidget):
             di.cal_distance(keys, xy[keys][0], xy[keys][1])  # 병원 이름과 해당 병원의 x좌표, y좌표를 cal_distance 함수에 전달
         hp_list = di.sort_by_distance()  # 반드시 cal_distance 함수 실행 이후에 sort_by_distance 함수를 실행, 거리 기준으로 정렬된 병원 이름 데이터 리스트 리턴
         print(hp_list)
+        length = len(hp_list)
+        print(length)
 
+        if length > 5:
+            for i in range(5,length):
+                del hp_list[5]
 
-        #print(main_example.get_ER_phone(hospital_data, hp_dict))
-
-        ## hp_dict 거리 순 정렬 결과 : list.
+        print(hp_list)
 
         for key in hp_dict:
             if key not in hp_list:
                 del hp_dict[key]
 
         print(hp_dict)
-        print(hp_list)
 
         self.new_page(hospital_data, hp_list, hp_dict)
 
