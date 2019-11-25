@@ -7,7 +7,7 @@ loc = 'https://ipapi.co/'
 
 class Kakao_api:
     def __init__(self):
-        self.api_key = '74f2836791b7cbaaa18d715326a695f7'
+        self.api_key = 'ea01b00367677ce3c9f5208fa6f4a478'
 
         self.headers = {
             'Authorization': 'KakaoAK ' + self.api_key
