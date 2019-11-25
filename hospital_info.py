@@ -99,8 +99,8 @@ class Hospital_data(Hospital):
                 info_x = info_x[0].getText()
                 info_y = info_y[0].getText()
             except IndexError:
-                info_x = 'U'  # U for Unknown
-                info_y = 'U'
+                info_x = '0'  # 0을 입력하면 거리가 너무 멀어 정렬결과로 안 나옴(사실 거리가 안 나온 병원은 없음)
+                info_y = '0'
             xy.update({hp: [float(info_x), float(info_y)]})
         return xy
 
