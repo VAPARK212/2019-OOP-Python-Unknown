@@ -9,7 +9,7 @@ import hospital_sort
 # 출처: https://stackoverflow.com/questions/6893968/how-to-get-the-return-value-from-a-thread-in-python
 class ThreadWithReturnValue(Thread):
     def __init__(self, group=None, target=None, name=None,
-                 args=(), kwargs={}, Verbose=None):
+                 args=(), kwargs={}, Verbose = None):
         Thread.__init__(self, group, target, name, args, kwargs)
         self._return = None
 
