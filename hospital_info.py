@@ -33,14 +33,19 @@ class Hospital_data(Hospital):
     def __init__(self, url):
         super().__init__(url)
 
-    def get_info_by_HPID(self, treatment_name, HPID):
-        connecturl = self.connecturl + '&HPID=' + HPID
-        response = requests.get(connecturl)
-        response.raise_for_status()
-        html = response.text
-        soup4search = bs4.BeautifulSoup(html, 'html.parser')
 
-        info_recv = soup4search.select(treatment_name)
+    def make_soup_list(self, hp_dict):
+        self.soup_dict = {}
+        for hp in hp_dict:
+            connecturl = self.connecturl + '&HPID=' + hp_dict[hp]
+            response = requests.get(connecturl)
+            response.raise_for_status()
+            html = response.text
+            self.soup_dict.update({hp: bs4.BeautifulSoup(html, 'html.parser')})
+
+
+    def get_info_by_HPID(self, treatment_name, key):
+        info_recv = self.soup_dict[key].select(treatment_name)
         try:
             info_recv = info_recv[0].getText()
         except IndexError:
@@ -50,16 +55,12 @@ class Hospital_data(Hospital):
         else:
             return 0
 
+
+
     def get_ERphone_by_HPID(self, hp_dict):
         ER_phone = {}
         for hp in hp_dict:
-            connecturl = self.connecturl + '&HPID=' + hp_dict[hp]
-            response = requests.get(connecturl)
-            response.raise_for_status()
-            html = response.text
-            soup4search = bs4.BeautifulSoup(html, 'html.parser')
-
-            info_recv = soup4search.select('dutyTel3')
+            info_recv = self.soup_dict[hp].select('dutyTel3')
             try:
                 info_recv = info_recv[0].getText()
             except IndexError:
@@ -70,13 +71,7 @@ class Hospital_data(Hospital):
     def get_Address_by_HPID(self, hp_dict):
         Address = {}
         for hp in hp_dict:
-            connecturl = self.connecturl + '&HPID=' + hp_dict[hp]
-            response = requests.get(connecturl)
-            response.raise_for_status()
-            html = response.text
-            soup4search = bs4.BeautifulSoup(html, 'html.parser')
-
-            info_recv = soup4search.select('dutyAddr')
+            info_recv = self.soup_dict[hp].select('dutyAddr')
             try:
                 info_recv = info_recv[0].getText()
             except IndexError:
@@ -87,14 +82,8 @@ class Hospital_data(Hospital):
     def get_xy_by_HPID(self, hp_dict):
         xy = {}
         for hp in hp_dict:
-            connecturl = self.connecturl + '&HPID=' + hp_dict[hp]
-            response = requests.get(connecturl)
-            response.raise_for_status()
-            html = response.text
-            soup4search = bs4.BeautifulSoup(html, 'html.parser')
-
-            info_x = soup4search.select('wgs84Lon')
-            info_y = soup4search.select('wgs84Lat')
+            info_x = self.soup_dict[hp].select('wgs84Lon')
+            info_y = self.soup_dict[hp].select('wgs84Lat')
             try:
                 info_x = info_x[0].getText()
                 info_y = info_y[0].getText()
