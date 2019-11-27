@@ -145,7 +145,7 @@ class MyApp(QWidget):
         for i in range(0, 12):
             if treat_li[i] is 1:
                 if i is not 11:
-                    treatment_list.append('MKioskTy' + '%d' % i)
+                    treatment_list.append('MKioskTy' + '%d' % (i+1))
                 else:
                     treatment_list.append('MKioskTy25')
 
