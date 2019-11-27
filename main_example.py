@@ -77,10 +77,11 @@ def get_Address(hospital_data, hp_dict):
 def get_data_hospital(hospital_data, treatment_in, hp_l_in, hp_dict_in):
     hp_list = []
     hp_dict = {}
+    hospital_data.make_soup_list(hp_dict_in)
     for hp in hp_l_in:
         flag = 1
         for i in treatment_in:
-            delete = hospital_data.get_info_by_HPID(treatment_name=i, HPID=hp_dict_in[hp])
+            delete = hospital_data.get_info_by_HPID(treatment_name=i, key=hp)
             if delete:
                 flag = 0
                 break
@@ -132,13 +133,14 @@ class ThreadWithReturnValue(Thread):
 
 if __name__ == '__main__':
     # region1 = get_location()
-    region1 = '대전광역시'
+    region1 = '서울특별시'
 
     hp_data = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytBassInfoInqire?'
     hp_from_add_url = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire?'
     treatment_list = ['MKioskTy25']
 
     hospital_data = Hospital_data(hp_data)
+
     hospital_pos = Hospital_data_from_pos(hp_from_add_url, region1)
     print('페이지 수:' + str(hospital_pos.page_no))
     print(hospital_pos.show_key())
@@ -157,10 +159,10 @@ if __name__ == '__main__':
     """
     hp_dict = get_hp_dict(hospital_pos)
     hp_list = list(hp_dict)
-
+    print(1)
     hp_list, hp_dict = get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
-    # print(Address)
-
     print(hp_list)
+    xy = hospital_data.get_xy_by_HPID(hp_dict)
+    print(xy)
 
 
