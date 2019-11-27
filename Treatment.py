@@ -244,7 +244,7 @@ class new_widget(StWidgetForm):
             i += 1
 
     def btn_make(self,i,key,xy):
-        self.btn.append(QPushButton('Enter', self))
+        self.btn.append(QPushButton('Map', self))
         self.box.addWidget(self.btn[i])
         self.btn[i].clicked.connect(lambda state, name=key, x=xy[0], y=xy[1], : map_opener.open_map(name,y,x))
 
