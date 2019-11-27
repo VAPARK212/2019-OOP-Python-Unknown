@@ -2,7 +2,7 @@ import webbrowser
 
 
 def open_map(name, y, x):   # 병원 이름, 위도, 경도 전달
-    link = "https://map.kakao.com/link/map/"+str(name)+','+str(y)+','+str(x)
+    link = "https://map.kakao.com/link/map/"+str(name)+','+str(y)+','+str(x)    # 카카오 맵 링크
     # print(link)
     webbrowser.open(link)
 
