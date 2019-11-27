@@ -144,10 +144,10 @@ class MyApp(QWidget):
 
         for i in range(0, 12):
             if treat_li[i] is 1:
-                if i is not 12:
+                if i is not 11:
                     treatment_list.append('MKioskTy' + '%d' % i)
                 else:
-                    treatment_list.append('MKioskTy12')
+                    treatment_list.append('MKioskTy25')
 
 
         # 지역, 병원 정보 받기
@@ -157,11 +157,11 @@ class MyApp(QWidget):
         # 주소만을 바탕으로 한 dict list
         hp_dict = main_example.get_hp_dict(hospital_pos)
         hp_list = list(hp_dict)
-        ## print(hp_list)
+        print(hp_list)
 
         # 가능한 수술을 바탕으로 한 dict list
         hp_list, hp_dict = main_example.get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
-        ## print(hp_list)
+        print(hp_list)
 
         # xy좌표를 불러오는 thread 시간 단축 (48%)
         thread_xy = ThreadWithReturnValue(target=main_example.get_xy, args=(hospital_data, hp_dict))
