@@ -27,3 +27,6 @@ class Kakao_api:
     @abstractmethod
     def url_maker(self):
         pass
+
+# 출처: https://github.com/kadragon/oop_python_ex/blob/master/project_ex/kakao_api.py
+# 출처: https://ipapi.co/api/?python#introduction
