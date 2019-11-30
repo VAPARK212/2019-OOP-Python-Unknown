@@ -18,7 +18,10 @@ class Hospital_sort:
         # print(len(sorted_dic))
         # print(sorted_dic)
         li = []
-        for i in range(5):
+        length = len(sorted_dic)
+        if(length > 5):
+            length = 5
+        for i in range(length):
             li.append(sorted_dic[i][0])
         return li
 
