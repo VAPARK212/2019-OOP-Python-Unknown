@@ -2,6 +2,7 @@ import bs4
 import requests
 import math
 
+#url 주소 및 입력 명령 참고: NIA-IFT_OpenAPI활용가이드-01.국립중앙의료원정보조회서비스
 
 class Hospital:
     """
@@ -27,7 +28,7 @@ class Hospital:
 
 class Hospital_data(Hospital):
     """
-    parsing으로 data를 가져온다
+    병원 ID를 바탕으로 접속해 parsing으로 data를 가져온다
     """
 
     def __init__(self, url):

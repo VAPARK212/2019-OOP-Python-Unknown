@@ -1,39 +1,17 @@
 from hospital_info import *
 from get_location import *
 
-"""
-def print_local_list(data_list):
-    for data in data_list:
-        print("%s | %s" % (data['place_name'], data['road_address_name']))
-
-local_keyword = input("현재 위치 키워드 입력> ")
-Lk = collect_local(local_keyword)
-near_local_list = Lk.local_list()   # 검색한 키워드의 주변 위치 정보 리스트
-print_local_list(near_local_list)   # 위치 정보 리스트 출력
-
-correct_address = input("정확한 지번 입력> ")    # 사용자가 위의 near_local_list 중에서 하나 선택하여 road_address_name 입력
-Ls = emergency_search(correct_address)
-data_list = Ls.keyword_find_emergency()
-
-district = correct_address.split()
-print(district)
-for data in data_list:
-    print("%s | %s | %s | %s"%(data['place_name'], data['phone'], data['place_url'], data['road_address_name']))
-
-"""
-"""
-여기서 부터 병원 만지작 코드
-"""
-
-
-
 
 def get_location():
+    """
+    사용자의 위치를 IP로 부터 가져오는 코드
+    :return:
+    """
     local = get_local()
     print(local.local_coord2region())
 
-    region1 = list(local.local_coord2region())[0]
-    region2 = list(local.local_coord2region())[1]
+    region1 = list(local.local_coord2region())[0] #지역구 1. 광범위
+    region2 = list(local.local_coord2region())[1] #지역구 2. 세부적
 
     if region1 == '':
         if region2 != '':
@@ -44,6 +22,11 @@ def get_location():
 
 
 def basic_info(region1):
+    """
+    병원에 대한 정보를 만드는 함수.
+    :param region1: 사용자의 지역
+    :return: 사용자 지역의 병원들에 대한 정보를 가져오는 2가지 인스턴스
+    """
     hp_data = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytBassInfoInqire?'
     hp_from_add_url = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire?'
 
@@ -56,25 +39,45 @@ def basic_info(region1):
 
 
 def get_hp_dict(hospital_pos):
+    """
+    지역의 모든 병원 dictionary를 만드는 함수
+    :param hospital_pos: 지역의 병원들에 대한 정보를 가져오는 인스턴스
+    :return: 사용자의 지역내의 병원을 '병원명':'병원ID'로 정리
+    """
     hp_dict = hospital_pos.get_name_list_id()
     return hp_dict
 
 def get_ER_phone(hospital_data, hp_dict):
+    """
+    병원 dictionary에서 각 병원의 응급실 전화번호를 검색
+    :param hospital_data: 정보 검색용 인스턴스
+    :param hp_dict: 검색할 병원의 dictionary
+    :return: 병원:전화번호의 dictionary
+    """
     ER_phone = hospital_data.get_ERphone_by_HPID(hp_dict)
     return ER_phone
 
 
 def get_xy(hospital_data, hp_dict):
+    """
+    병원 dictionary에서 각 병원의 xy좌표를 검색
+    :param hospital_data: 정보 검색용 인스턴스
+    :param hp_dict: 검색할 병원의 dictionary
+    :return: 병원:xy좌표의 dictionary
+    """
     xy = hospital_data.get_xy_by_HPID(hp_dict)
     return xy
 
 
-def get_Address(hospital_data, hp_dict):
-    Address = hospital_data.get_Address_by_HPID(hp_dict)
-    return Address
-
-
 def get_data_hospital(hospital_data, treatment_in, hp_l_in, hp_dict_in):
+    """
+    병원 dictionary에서 모든 입력한 진료과목들을 토대로 가능한 병원들을 추려냄
+    :param hospital_data: 정보 검색용 인스턴스
+    :param treatment_in: 입력한 진료과목
+    :param hp_l_in: 병원 리스트
+    :param hp_dict_in: 병원:병원ID의 dictionary
+    :return: 입력한 진료과목을 모두 충족하는 병원 리스트, dictionary
+    """
     hp_list = []
     hp_dict = {}
     hospital_data.make_soup_list(hp_dict_in)
@@ -91,10 +94,9 @@ def get_data_hospital(hospital_data, treatment_in, hp_l_in, hp_dict_in):
     return hp_list, hp_dict
 
 
-treatment_list = ['MKioskTy1', 'MKioskTy10', 'MKioskTy11', 'MKioskTy2', 'MKioskTy25', 'MKioskTy3',
-                  'MKioskTy4',
-                  'MKioskTy5', 'MKioskTy6', 'MKioskTy7', 'MKioskTy8', 'MKioskTy9']
 """
+응급 병원 진료 과목
+#출처: NIA_IFT_OpenAPI활용가이드-01.국립중앙의료원정보조회서비스
 dutyEryn: 응급실 가용 여부 (가능: 1, 불가능: 2)
 MKioskTy1: 뇌출혈수술 (가능: Y, 불가능: N, 정보 없음: U)
 MKioskTy10: 신생아
@@ -111,29 +113,11 @@ MKioskTy9: 정신질환자
 
 """
 
-#thread 내용. Treatment으로 옮김
-"""
-# 출처: https://stackoverflow.com/questions/6893968/how-to-get-the-return-value-from-a-thread-in-python
-class ThreadWithReturnValue(Thread):
-    def __init__(self, group=None, target=None, name=None,
-                 args=(), kwargs={}, Verbose=None):
-        Thread.__init__(self, group, target, name, args, kwargs)
-        self._return = None
 
-    def run(self):
-        print(type(self._target))
-        if self._target is not None:
-            self._return = self._target(*self._args,
-                                        **self._kwargs)
-
-    def join(self, *args):
-        Thread.join(self, *args)
-        return self._return
-"""
-
+#스스로 test 할 수 있도록 만든 code
 if __name__ == '__main__':
     # region1 = get_location()
-    region1 = '서울특별시'
+    region1 = '서울특별시' #임의 지역 설정
 
     hp_data = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytBassInfoInqire?'
     hp_from_add_url = 'http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire?'
@@ -145,18 +129,6 @@ if __name__ == '__main__':
     print('페이지 수:' + str(hospital_pos.page_no))
     print(hospital_pos.show_key())
 
-
-    #서울특별시 기준으로 thread 사용 미사용을 통한 모든 정보 조회 결과 속도: thread 사용시 48% 감소함
-    """
-    thread 이용
-    # xy좌표를 불러오는 thread 시간 단축 (48%)
-    thread_xy = ThreadWithReturnValue(target=main_example.get_xy, args=(hospital_data, hp_dict))
-    thread_xy.start()
-
-    # 앞에서 실행한 thread의 결과를 각각 불러온다. 반환하는 thread 형식
-    xy = thread_xy.join()
-    print(xy)
-    """
     hp_dict = get_hp_dict(hospital_pos)
     hp_list = list(hp_dict)
     print(1)
