@@ -2,13 +2,16 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-import main_functions
+import main_functions as main_example
 from threading import Thread
 import hospital_sort
 import map_opener
 
 # 출처: https://stackoverflow.com/questions/6893968/how-to-get-the-return-value-from-a-thread-in-python
 class ThreadWithReturnValue(Thread):
+    '''
+    가져오는 시간을 단축하기 위한 리턴 값이 있는 Thread 클래스 선언
+    '''
     def __init__(self, group=None, target=None, name=None,
                  args=(), kwargs={}, Verbose = None):
         Thread.__init__(self, group, target, name, args, kwargs)
@@ -135,11 +138,14 @@ class MyApp(QWidget):
     @pyqtSlot()
     def hospital(self,treat_li):
         '''
-        print('""')
-        print(treat_li)
-        print('""')
+        엔터 버튼을 누르고 나면 최단 거리의 다섯개 병원을 선별
+        :param treat_li:
+        :return:
         '''
 
+        # print(treat_li)
+
+        # 선택 받은 수술들의 코드로 구성된 list 생성
         treatment_list = []
 
         for i in range(0, 12):
@@ -151,22 +157,20 @@ class MyApp(QWidget):
 
 
         # 지역, 병원 정보 받기
-        region1 = '서울특별시' #region1 = main_example.get_location()
-        hospital_data, hospital_pos = main_functions.basic_info(region1)
+        region1 = main_example.get_location() # region1 = '서울특별시'
+        hospital_data, hospital_pos = main_example.basic_info(region1)
 
         # 주소만을 바탕으로 한 dict list
-        hp_dict = main_functions.get_hp_dict(hospital_pos)
+        hp_dict = main_example.get_hp_dict(hospital_pos)
         hp_list = list(hp_dict)
         print(hp_list)
 
         # 가능한 수술을 바탕으로 한 dict list
-        hp_list, hp_dict = main_functions.get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
+        hp_list, hp_dict = main_example.get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
         print(hp_list)
 
-        # xy좌표를 불러오는 thread 시간 단축 (48%)
-        thread_xy = ThreadWithReturnValue(target=main_functions.get_xy, args=(hospital_data, hp_dict))
+        thread_xy = ThreadWithReturnValue(target=main_example.get_xy, args=(hospital_data, hp_dict))
         thread_xy.start()
-
         # 앞에서 실행한 thread의 결과를 각각 불러온다. 반환하는 thread 형식
         xy = thread_xy.join()
 
@@ -233,6 +237,7 @@ class new_widget(StWidgetForm):
         self.hp_dict = hp_dict
         self.xy = xy
 
+        # 병원 정보 QLabel 에 들어갈 정보 작성
         self.Label()
 
         self.btn = []
@@ -244,20 +249,31 @@ class new_widget(StWidgetForm):
             i += 1
 
     def btn_make(self,i,key,xy):
+        '''
+        눌렀을 때 카카오 맵을 띄워주는 버튼 생성
+        :param i:
+        :param key:
+        :param xy:
+        :return:
+        '''
         self.btn.append(QPushButton('Map', self))
         self.box.addWidget(self.btn[i])
         self.btn[i].clicked.connect(lambda state, name=key, x=xy[0], y=xy[1], : map_opener.open_map(name,y,x))
 
     def Label(self):
-
+        '''
+        선별된 5개 병원에 대한 정보를 문자열 형식으로 생성
+        :return:
+        '''
         # 전화번호를 불러오는 thread 시간 단축 (48%)
-        thread_ER = ThreadWithReturnValue(target=main_functions.get_ER_phone, args=(self.hospital_data, self.hp_dict))
+        thread_ER = ThreadWithReturnValue(target=main_example.get_ER_phone, args=(self.hospital_data, self.hp_dict))
         thread_ER.start()
 
         # 주소를 불러오는 thread 시간 단축 (48%)
-        thread_Address = ThreadWithReturnValue(target=main_functions.get_Address, args=(self.hospital_data, self.hp_dict))
+        thread_Address = ThreadWithReturnValue(target=main_example.get_Address, args=(self.hospital_data, self.hp_dict))
         thread_Address.start()
 
+        # 앞에서 실행한 thread의 결과를 각각 불러온다. 반환하는 thread 형식
         Phone = thread_ER.join()
         ## print(Phone)
 
@@ -277,3 +293,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MyApp()
     sys.exit(app.exec_())
+
+# 출처 : http://codetorial.net/pyqt5/index.html
+# 출처 : https://github.com/RavenKyu/OpenTutorials_PyQt/blob/master/QtFramework/QtWidgets/QStackedWidget/QStackedWidget_00_basic.py
