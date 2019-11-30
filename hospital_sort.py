@@ -19,6 +19,8 @@ class Hospital_sort:
         # print(sorted_dic)
         li = []
         length = len(sorted_dic)
+
+        # 최종 출력되는 병원 정보는 5개이므로 불필요하게 소모되는 시간을 단축하기 위해 정렬된 병원의 개수가 5개보다 많을 경우 리턴하는 병원 개수를 5개로 제한
         if(length > 5):
             length = 5
         for i in range(length):
