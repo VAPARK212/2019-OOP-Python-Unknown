@@ -108,7 +108,7 @@ class Hospital_data(Hospital):
 
 class Hospital_data_from_pos(Hospital):
     """
-    Hospital 의 위치를 가지고 hpid 기관 ID
+    Hospital 의 위치를 가지고 hpid 기관 ID 검색
     """
 
     def __init__(self, url, add1):  # Q0 주소(시도) 입력
