@@ -8,9 +8,11 @@ class Hospital_sort:
         self.sy = float(get_local().get_points()[1])
         self.dic = {}
 
+    # 사용자의 현재 위치와 병원 사이 거리의 제곱을 계산하여 class 내의 dict에 저장하는 함수
     def cal_distance(self, key, x, y):
         self.dic[key] = (self.sx-x)*(self.sx-x)+(self.sy-y)*(self.sy-y)
 
+    # class 내의 dict의 value를 기준으로 오름차순 정렬하는 함수
     def sort_by_distance(self):     # 거리 기준 정렬 후 병원 이름 리스트 리턴
         sorted_dic = sorted(self.dic.items(), key=operator.itemgetter(1))
         # print(len(sorted_dic))

@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-import main_example
+import main_functions
 from threading import Thread
 import hospital_sort
 import map_opener
@@ -152,19 +152,19 @@ class MyApp(QWidget):
 
         # 지역, 병원 정보 받기
         region1 = '서울특별시' #region1 = main_example.get_location()
-        hospital_data, hospital_pos = main_example.basic_info(region1)
+        hospital_data, hospital_pos = main_functions.basic_info(region1)
 
         # 주소만을 바탕으로 한 dict list
-        hp_dict = main_example.get_hp_dict(hospital_pos)
+        hp_dict = main_functions.get_hp_dict(hospital_pos)
         hp_list = list(hp_dict)
         print(hp_list)
 
         # 가능한 수술을 바탕으로 한 dict list
-        hp_list, hp_dict = main_example.get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
+        hp_list, hp_dict = main_functions.get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
         print(hp_list)
 
         # xy좌표를 불러오는 thread 시간 단축 (48%)
-        thread_xy = ThreadWithReturnValue(target=main_example.get_xy, args=(hospital_data, hp_dict))
+        thread_xy = ThreadWithReturnValue(target=main_functions.get_xy, args=(hospital_data, hp_dict))
         thread_xy.start()
 
         # 앞에서 실행한 thread의 결과를 각각 불러온다. 반환하는 thread 형식
@@ -251,11 +251,11 @@ class new_widget(StWidgetForm):
     def Label(self):
 
         # 전화번호를 불러오는 thread 시간 단축 (48%)
-        thread_ER = ThreadWithReturnValue(target=main_example.get_ER_phone, args=(self.hospital_data, self.hp_dict))
+        thread_ER = ThreadWithReturnValue(target=main_functions.get_ER_phone, args=(self.hospital_data, self.hp_dict))
         thread_ER.start()
 
         # 주소를 불러오는 thread 시간 단축 (48%)
-        thread_Address = ThreadWithReturnValue(target=main_example.get_Address, args=(self.hospital_data, self.hp_dict))
+        thread_Address = ThreadWithReturnValue(target=main_functions.get_Address, args=(self.hospital_data, self.hp_dict))
         thread_Address.start()
 
         Phone = thread_ER.join()
