@@ -9,10 +9,6 @@ import map_opener
 
 # 출처: https://stackoverflow.com/questions/6893968/how-to-get-the-return-value-from-a-thread-in-python
 class ThreadWithReturnValue(Thread):
-    '''
-        가져오는 시간을 단축하기 위한 리턴 값이 있는 Thread 클래스 선언
-        '''
-
     def __init__(self, group=None, target=None, name=None,
                  args=(), kwargs={}, Verbose = None):
         Thread.__init__(self, group, target, name, args, kwargs)
@@ -39,7 +35,7 @@ class MyApp(QWidget):
 
         self.treatment = [0,0,0,0,0,0,0,0,0,0,0,0] # 고객이 선택한 선택지 목록
 
-        self.stk_w = QStackedWidget(self) # 여러 개의 창을 띄우기 위한 방법
+        self.stk_w = QStackedWidget(self) #
         self.initUI() # 최초 창 띄우기
 
     def initUI(self):
@@ -99,7 +95,8 @@ class MyApp(QWidget):
         '''
         Enter 버튼에 해당하는 푸쉬버튼 생성
         푸쉬버튼이 선택될 경우
-        객관식 선택 결과를 담은 리스트 treatment와 함께 시그널이 전송됨
+        객관식 선택 결과를 담은 리스트 treatment와 함게 시그널이 전송됨
+          *새로운 창 띄우기는 병원이 최종 결정된 후에 진행해야함.
         :return:
         '''
         self.btn = QPushButton('Enter', self)
@@ -138,14 +135,11 @@ class MyApp(QWidget):
     @pyqtSlot()
     def hospital(self,treat_li):
         '''
-        엔터 버튼을 누르고 나면 최단 거리의 다섯개 병원을 선별
-        :param treat_li:
-        :return:
+        print('""')
+        print(treat_li)
+        print('""')
         '''
 
-        # print(treat_li)
-
-        # 선택 받은 수술들의 코드로 구성된 list 생성
         treatment_list = []
 
         for i in range(0, 12):
@@ -157,7 +151,7 @@ class MyApp(QWidget):
 
 
         # 지역, 병원 정보 받기
-        region1 = '서울특별시' #region1 = main_example.get_location()
+        region1 = main_functions.get_location() # region1 = '서울특별시'
         hospital_data, hospital_pos = main_functions.basic_info(region1)
 
         # 주소만을 바탕으로 한 dict list
@@ -169,6 +163,7 @@ class MyApp(QWidget):
         hp_list, hp_dict = main_functions.get_data_hospital(hospital_data, treatment_list, hp_list, hp_dict)
         print(hp_list)
 
+        # xy좌표를 불러오는 thread 시간 단축 (48%)
         thread_xy = ThreadWithReturnValue(target=main_functions.get_xy, args=(hospital_data, hp_dict))
         thread_xy.start()
 
@@ -181,6 +176,7 @@ class MyApp(QWidget):
         for keys in xy:
             di.cal_distance(keys, xy[keys][0], xy[keys][1])  # 병원 이름과 해당 병원의 x좌표, y좌표를 cal_distance 함수에 전달
         hp_list = di.sort_by_distance()  # 반드시 cal_distance 함수 실행 이후에 sort_by_distance 함수를 실행, 거리 기준으로 정렬된 병원 이름 데이터 리스트 리턴
+
 
         # 가장 가까운 5개 병원만 남김.
         length = len(hp_list)
@@ -238,7 +234,6 @@ class new_widget(StWidgetForm):
         self.hp_dict = hp_dict
         self.xy = xy
 
-        # 병원 정보 QLabel 에 들어갈 정보 작성
         self.Label()
 
         self.btn = []
@@ -250,23 +245,11 @@ class new_widget(StWidgetForm):
             i += 1
 
     def btn_make(self,i,key,xy):
-        '''
-        눌렀을 때 카카오 맵을 띄워주는 버튼 생성
-        :param i:
-        :param key:
-        :param xy:
-        :return:
-        '''
-
         self.btn.append(QPushButton('Map', self))
         self.box.addWidget(self.btn[i])
         self.btn[i].clicked.connect(lambda state, name=key, x=xy[0], y=xy[1], : map_opener.open_map(name,y,x))
 
     def Label(self):
-        '''
-        선별된 5개 병원에 대한 정보를 문자열 형식으로 생성
-        :return:
-        '''
 
         # 전화번호를 불러오는 thread 시간 단축 (48%)
         thread_ER = ThreadWithReturnValue(target=main_functions.get_ER_phone, args=(self.hospital_data, self.hp_dict))
@@ -276,12 +259,11 @@ class new_widget(StWidgetForm):
         thread_Address = ThreadWithReturnValue(target=main_functions.get_Address, args=(self.hospital_data, self.hp_dict))
         thread_Address.start()
 
-        # 앞에서 실행한 thread의 결과를 각각 불러온다. 반환하는 thread 형식
         Phone = thread_ER.join()
-        ## print(Phone)
+        print(Phone)
 
         Address = thread_Address.join()
-        ## print(Address)
+        print(Address)
 
         for key in self.hp_list:
             hos_label = '기관명 : ' + key + '\n' + \
@@ -296,6 +278,5 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MyApp()
     sys.exit(app.exec_())
-
 # 출처 : http://codetorial.net/pyqt5/index.html
 # 출처 : https://github.com/RavenKyu/OpenTutorials_PyQt/blob/master/QtFramework/QtWidgets/QStackedWidget/QStackedWidget_00_basic.py
