@@ -108,7 +108,7 @@ class Hospital_data(Hospital):
 
 class Hospital_data_from_pos(Hospital):
     """
-    Hospital 의 위치를 가지고 hpid 기관 ID, 기관명, 응급실 전번을 가져온다.
+    Hospital 의 위치를 가지고 hpid 기관 ID
     """
 
     def __init__(self, url, add1):  # Q0 주소(시도) 입력
@@ -138,13 +138,4 @@ class Hospital_data_from_pos(Hospital):
                 name_list_id.update({name_list[j].getText(): id_list[j].getText()})
         return name_list_id
 
-
-    def get_detailAdress(self, name_list):
-        Address_list = self.soup.select('dutyAddr')
-        Address = {}
-
-        for i in range(len(Address_list)):
-            Address.update({name_list[i]: Address_list[i].getText()})
-
-        return Address
 

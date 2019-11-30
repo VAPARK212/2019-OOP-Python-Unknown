@@ -69,6 +69,17 @@ def get_xy(hospital_data, hp_dict):
     return xy
 
 
+def get_Address(hospital_data, hp_dict):
+    """
+
+    :param hospital_data:
+    :param hp_dict:
+    :return: 병원:병원주소
+    """
+    Address = hospital_data.get_Address_by_HPID(hp_dict)
+    return Address
+
+
 def get_data_hospital(hospital_data, treatment_in, hp_l_in, hp_dict_in):
     """
     병원 dictionary에서 모든 입력한 진료과목들을 토대로 가능한 병원들을 추려냄
